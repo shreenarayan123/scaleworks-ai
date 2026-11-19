@@ -129,7 +129,7 @@ export function toCallDetail(job: Job): CallDetail {
 // ---------- Public API used by the pages ----------
 
 export function validateUpload(file: Pick<File, 'name' | 'size'>): string | null {
-  if (!/\.(wav|mp3|m4a|mp4|ogg|opus)$/i.test(file.name)) return 'Choose a WAV, MP3, M4A, MP4, OGG, or OPUS audio recording.';
+  if (!/\.(wav|mp3|m4a|mp4|ogg|opus)$/i.test(file.name)) return 'Choose a WAV, MP3, MP4, OGG, or OPUS audio recording.';
   if (file.size > 200 * 1024 * 1024) return 'This file is too large. Choose a recording under 200 MB.';
   return null;
 }

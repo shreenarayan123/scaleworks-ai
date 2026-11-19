@@ -36,7 +36,7 @@ function CallsPage() {
     <h2>{upload.isPending ? 'Uploading your recording…' : <>Drop a call recording here <span>or choose a file to get started</span></>}</h2>
     <Button size="sm" onClick={() => input.current?.click()} disabled={upload.isPending}><Upload size={14}/>Upload recording</Button>
     <input ref={input} type="file" accept=".wav,.mp3,.m4a,.mp4,.ogg,.opus,audio/*,video/mp4" aria-label="Upload audio recording" className="sr-only" onChange={e => { selectFile(e.target.files?.[0]); e.target.value = ''; }}/>
-    <span className="upload-details">WAV, MP3, M4A, MP4, OGG, OPUS<span>·</span>Up to 200 MB</span>
+    <span className="upload-details">WAV, MP3, MP4<span>·</span>Up to 200 MB</span>
    </div>
    <div className="upload-note"><LockKeyhole size={11}/>Your recordings stay in your workspace. Only you can access them.</div>
    {error && <p className="inline-error" role="alert"><AlertTriangle size={15}/>{error}</p>}
