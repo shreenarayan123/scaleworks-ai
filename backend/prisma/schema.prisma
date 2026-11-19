@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// The connection URL comes from prisma.config.ts (DATABASE_URL in .env).
+datasource db {
+  provider = "postgresql"
+}
+
+model Job {
+  id                 String    @id @default(uuid())
+  fileName           String
+  filePath           String
+  // uploaded | transcribing | scoring_tone | analyzing | done | failed
+  stage              String    @default("uploaded")
+  // Last stage whose outputs were durably committed; used to resume failed jobs.
+  checkpointStage     String    @default("uploaded")
+  error              String?
+  durationSec        Float     @default(0)
+  repSpeaker         String?
+  transcript         String?   // full transcript text from Scribe
+  speakerTranscripts Json?     // { "speaker_0": "text...", "speaker_1": "text..." }
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  words    Word[]
+  segments Segment[]
+  result   Result?
+}
+
+model Word {
+  id      Int    @id @default(autoincrement())
+  jobId   String
+  index   Int    // position in the transcript
+  text    String
+  start   Float
+  end     Float
+  speaker String
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, index])
+}
+
+// A rep-only slice of audio that was sent to the emotion service.
+model Segment {
+  id       Int    @id @default(autoincrement())
+  jobId    String
+  start    Float
+  end      Float
+  text     String
+  emotions Json   // { "angry": 0.01, "neutral": 0.93, ... }
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+model Result {
+  id              Int    @id @default(autoincrement())
+  jobId           String @unique
+  overallEmotions Json   // duration-weighted score per emotion
+  evidence        Json   // segments with the highest negative-emotion scores
+  actionItems     Json   // LLM A output
+  verdict         Json   // LLM B output: { verdict, score, summary, flags[] }
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
