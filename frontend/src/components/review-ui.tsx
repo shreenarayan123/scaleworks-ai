@@ -1,0 +1,11 @@
+import { AlertTriangle, Check, Loader2, ArrowRight, Headphones } from 'lucide-react';
+import { Button } from './ui/button';
+import { progressSteps, type Call } from '@/lib/api';
+export function ToneBadge({ verdict, large = false }: { verdict: 'RED' | 'GREEN'; large?: boolean }) {
+ const red = verdict === 'RED'; return <span aria-label={`${verdict}: ${red ? 'Negative tone' : 'Tone OK'}`} className={`tone-badge ${red ? 'tone-red' : 'tone-green'} ${large ? 'tone-large' : ''}`}>{red ? <AlertTriangle/> : <Check/>}{large ? (red ? 'Negative tone' : 'Tone OK') : verdict}</span>;
+}
+export function Status({ call }: { call: Call }) { return <span className={`status status-${call.status}`}>{call.status === 'processing' ? <Loader2 className="animate-spin" size={13}/> : <span className="status-dot"/>}{call.status === 'processing' ? call.progressStep ?? 'Processing' : call.status === 'ready' ? 'Ready' : 'Failed'}</span>; }
+export function Processing({ call }: { call: Call }) { const index = progressSteps.indexOf(call.progressStep ?? 'Uploading'); return <div className="processing-panel"><div className="processing-heading"><Loader2 className="animate-spin"/><div><h2>Reviewing your conversation</h2><p>We’re listening for the details that matter.</p></div></div><div className="processing-steps">{progressSteps.map((step, i) => <div key={step} className={i <= index ? 'step-current' : ''}><span>{i < index ? <Check size={14}/> : i === index ? <Loader2 size={14} className="animate-spin"/> : i + 1}</span>{step}</div>)}</div></div>; }
+export function ErrorState({ message, retry }: { message: string; retry?: () => void }) { return <div className="empty-panel"><AlertTriangle/><h2>Something went wrong</h2><p>{message}</p>{retry && <Button onClick={retry} variant="outline">Try again<ArrowRight/></Button>}</div>; }
+export function EmptyCalls() { return <div className="empty-panel"><Headphones/><h2>Your first review starts here</h2><p>Upload a customer call to see its tone, transcript, and next steps.</p></div>; }
+export function PageSkeleton() { return <div className="page-content"><div className="skeleton h-9 w-56"/><div className="skeleton mt-5 h-5 w-80"/><div className="skeleton mt-10 h-52 w-full"/><div className="skeleton mt-8 h-72 w-full"/></div>; }
