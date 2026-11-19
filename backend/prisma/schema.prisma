@@ -19,6 +19,7 @@ model Job {
   error              String?
   durationSec        Float     @default(0)
   repSpeaker         String?
+  analysisSettings   Json?
   transcript         String?   // full transcript text from Scribe
   speakerTranscripts Json?     // { "speaker_0": "text...", "speaker_1": "text..." }
   createdAt          DateTime  @default(now())

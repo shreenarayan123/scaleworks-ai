@@ -8,6 +8,7 @@ import { prisma } from "./db.js";
 import type { Prisma } from "./generated/prisma/client.js";
 import { negativeEvidence, overallScores, scoreSegments, type ScoredSegment } from "./emotion.js";
 import { extractActionItems, judgeTone, type Line } from "./llm.js";
+import { parseAnalysisSettings } from "./analysis-settings.js";
 import { transcribe } from "./scribe.js";
 import { buildRepSegments, mergeWords, sentences, textOf, type TimedWord } from "./segments.js";
 
@@ -89,6 +90,7 @@ async function loadScoredSegments(jobId: string): Promise<ScoredSegment[]> {
 
 async function analyzeStage(jobId: string, scored: ScoredSegment[]) {
   const job = await prisma.job.findUniqueOrThrow({ where: { id: jobId } });
+  const settings = parseAnalysisSettings(job.analysisSettings);
   const words = await prisma.word.findMany({ where: { jobId }, orderBy: { index: "asc" } });
   if (!job.repSpeaker) throw new Error("Cannot analyze tone without a representative speaker.");
   await setStage(jobId, "analyzing");
@@ -100,8 +102,8 @@ async function analyzeStage(jobId: string, scored: ScoredSegment[]) {
     text: textOf(s.words),
   }));
   const [actionItems, verdict] = await Promise.all([
-    extractActionItems(lines),
-    judgeTone(lines.filter((l) => l.role === "REP"), scored, overall, evidence),
+    extractActionItems(lines, settings),
+    judgeTone(lines.filter((l) => l.role === "REP"), scored, overall, evidence, settings),
   ]);
   const resultData = {
     overallEmotions: json(overall),

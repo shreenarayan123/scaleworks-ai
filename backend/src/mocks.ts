@@ -3,6 +3,7 @@
  * without API keys. The emotion service is still called for real on the real audio.
  */
 import type { Evidence } from "./emotion.js";
+import type { AnalysisSettings } from "./analysis-settings.js";
 import type { ActionItems, Line, ToneVerdict } from "./llm.js";
 import type { Transcript } from "./scribe.js";
 import type { TimedWord } from "./segments.js";
@@ -35,24 +36,36 @@ export function mockTranscript(durationSec: number): Transcript {
   return { text: SCRIPT.map(([, text]) => text).join(" "), words };
 }
 
-export function mockActionItems(lines: Line[]): ActionItems {
+export function mockActionItems(lines: Line[], settings: AnalysisSettings): ActionItems {
   const actionItems = lines
-    .filter((l) => /\b(I'll|we will)\b/i.test(l.text))
+    .filter((l) => /\b(I'll|we will)\b/i.test(l.text) || (settings.includeImpliedCommitments && /\b(we should|let's|could you)\b/i.test(l.text)))
+    .filter((l) => settings.includeCustomerRequests || l.role === "REP")
     .map((l) => ({
       owner: l.role === "REP" ? "Sales rep" : "Customer",
       task: l.text,
       due: l.text.match(/\b(today|by \w+day)\b/i)?.[0] ?? null,
       quote: l.text,
       timestamp: l.start,
+      confidence: 0.9,
     }));
   return { actionItems };
 }
 
-export function mockToneVerdict(repLines: Line[], evidence: Evidence[]): ToneVerdict {
+export function mockToneVerdict(repLines: Line[], evidence: Evidence[], settings: AnalysisSettings): ToneVerdict {
   const flags: ToneVerdict["flags"] = [];
-  const rude = repLines.find((l) => /stop you there|your side/i.test(l.text));
-  if (rude) {
-    flags.push({ timestamp: rude.start, source: "text", quote: rude.text, reason: "Blames the customer and cuts them off." });
+  const rules: Record<AnalysisSettings["negativeBehaviors"][number], RegExp> = {
+    Rude: /\b(damn|fuck|idiot|stupid)\b/i,
+    Hostile: /your side|your fault|fix it yourself/i,
+    Dismissive: /just follow|read the (setup )?guide|basic questions/i,
+    Sarcastic: /sure, because|right\?/i,
+    Interrupting: /stop you there|let me stop you|i am talking now/i,
+    Condescending: /clearly did not|basic questions|read the guide/i,
+  };
+  for (const line of repLines) {
+    const matched = settings.negativeBehaviors.filter((behavior) => rules[behavior].test(line.text));
+    if (matched.length) {
+      flags.push({ timestamp: line.start, source: "text", quote: line.text, reason: `Matches enabled tone criteria: ${matched.join(", ")}.` });
+    }
   }
   for (const e of evidence.filter((e) => e.score >= 0.5)) {
     flags.push({ timestamp: e.start, source: "voice", quote: e.text, reason: `Voice sounds ${e.emotion} ${e.score.toFixed(2)}.` });
@@ -60,7 +73,9 @@ export function mockToneVerdict(repLines: Line[], evidence: Evidence[]): ToneVer
   return {
     verdict: flags.length > 0 ? "RED" : "GREEN",
     score: 80,
-    summary: "[MOCK] Canned verdict. The rep blamed the customer and interrupted them.",
+    summary: flags.length
+      ? "[MOCK] The rep matched one or more enabled tone criteria or voice signals."
+      : "[MOCK] No enabled tone criteria or elevated voice signals were detected.",
     flags,
   };
 }

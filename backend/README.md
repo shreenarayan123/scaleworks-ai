@@ -54,6 +54,10 @@ The job moves through `uploaded → transcribing → scoring_tone → analyzing 
 - The configured OpenAI-compatible GLM API extracts action items and assesses tone.
 - Zod validates the language-model responses before they are saved.
 
+## Analysis settings
+
+The frontend sends its tone criteria and action-item preferences with each upload and reanalysis. The backend snapshots those settings on the job and applies them when generating the final result. Tone criteria control which text behaviors can be flagged; custom tone rules are included in the tone review prompt. Action-item settings control customer requests, implied commitments, the minimum confidence threshold, and additional extraction rules. Existing jobs without a saved settings snapshot use the backend defaults when reanalyzed.
+
 Uploaded recordings are stored in `UPLOAD_DIR` (default `backend/uploads`) and referenced by path from PostgreSQL. Keep this directory available for playback, retries, and reanalysis.
 
 ## Checks and evaluation tools

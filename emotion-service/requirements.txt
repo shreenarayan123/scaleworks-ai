@@ -1,5 +1,5 @@
-torch==2.11.0
-torchaudio==2.11.1
+torch==2.11.0+cpu
+torchaudio==2.11.0+cpu
 funasr==1.4.27
 modelscope==1.40.3
 huggingface_hub==2.4.0

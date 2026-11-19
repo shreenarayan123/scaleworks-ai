@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { z } from "zod";
 import { config } from "./config.js";
 import { NEGATIVE_EMOTIONS, type Evidence, type ScoredSegment, type Scores } from "./emotion.js";
+import type { AnalysisSettings } from "./analysis-settings.js";
 import { mockActionItems, mockToneVerdict } from "./mocks.js";
 
 // GLM exposes an OpenAI-compatible API, so the official OpenAI SDK works with a different base URL.
@@ -22,6 +23,7 @@ export const ActionItemsSchema = z.object({
       due: z.string().nullable(), // only if a deadline was mentioned
       quote: z.string(), // the words that created the action item
       timestamp: z.number().min(0), // seconds
+      confidence: z.number().min(0).max(1), // model-estimated confidence
     }),
   ),
 });
@@ -89,21 +91,30 @@ export interface Line {
 }
 const formatLines = (lines: Line[]) => lines.map((l) => `[${l.start.toFixed(1)}s] ${l.role}: ${l.text}`).join("\n");
 
-export async function extractActionItems(lines: Line[]): Promise<ActionItems> {
-  if (config.mockExternal) return mockActionItems(lines);
+export async function extractActionItems(lines: Line[], settings: AnalysisSettings): Promise<ActionItems> {
+  const filterByConfidence = (items: ActionItems): ActionItems => ({
+    actionItems: items.actionItems.filter((item) => item.confidence * 100 >= settings.minConfidence),
+  });
+  if (config.mockExternal) return filterByConfidence(mockActionItems(lines, settings));
 
   const system = `You extract action items from sales call transcripts.
 An action item is a concrete commitment or request that someone has to do after the call.
 Reply with JSON only, in exactly this shape:
-{"actionItems": [{"owner": string, "task": string, "due": string | null, "quote": string, "timestamp": number}]}
+{"actionItems": [{"owner": string, "task": string, "due": string | null, "quote": string, "timestamp": number, "confidence": number}]}
 - owner: "Sales rep", "Customer", or the person's name if it is said.
 - task: short imperative sentence.
 - due: the deadline exactly as said ("Friday", "by end of month"), or null if none was mentioned. Never invent one.
 - quote: the exact words from the transcript that created the item.
 - timestamp: the [seconds] value of the line the quote comes from.
+- confidence: your confidence from 0 to 1 that this is a real, actionable next step supported by the transcript.
+- Minimum confidence required: ${settings.minConfidence}%. Return only items whose confidence meets this threshold.
+- ${settings.includeCustomerRequests ? "Include clear customer requests as action items, assigning the customer as owner when appropriate." : "Do not create action items owned by the customer; include only commitments or tasks for the sales rep."}
+- ${settings.includeImpliedCommitments ? "Include strongly implied commitments when the context makes the next step clear, but do not invent details." : "Include only explicit requests or commitments; exclude implied or speculative next steps."}
+- Additional workspace rules: ${settings.actionItemRules.trim() || "None."}
 Return {"actionItems": []} if there are none.`;
 
-  return chatJson(ActionItemsSchema, system, `Transcript (REP = sales rep, CUSTOMER = customer):\n${formatLines(lines)}`);
+  const items = await chatJson(ActionItemsSchema, system, `Transcript (REP = sales rep, CUSTOMER = customer):\n${formatLines(lines)}`);
+  return filterByConfidence(items);
 }
 
 // ---------- LLM B: tone verdict ----------
@@ -113,18 +124,31 @@ export async function judgeTone(
   segments: ScoredSegment[],
   overall: Scores,
   evidence: Evidence[],
+  settings: AnalysisSettings,
 ): Promise<ToneVerdict> {
   let verdict: ToneVerdict;
   if (config.mockExternal) {
-    verdict = mockToneVerdict(repLines, evidence);
+    verdict = mockToneVerdict(repLines, evidence, settings);
   } else {
+    const criteriaDescriptions: Record<AnalysisSettings["negativeBehaviors"][number], string> = {
+      Rude: "insults, profanity, or disrespectful language",
+      Hostile: "blaming, aggressive, or intimidating language",
+      Dismissive: "brushing off concerns or refusing reasonable help",
+      Sarcastic: "mocking or sarcastic wording",
+      Interrupting: "cutting the customer off or talking over them",
+      Condescending: "talking down to the customer or belittling them",
+    };
+    const textCriteria = settings.negativeBehaviors.length
+      ? settings.negativeBehaviors.map((behavior) => `${behavior}: ${criteriaDescriptions[behavior]}`).join("; ")
+      : "No text behaviors are enabled; do not create text-based flags.";
     const system = `You review the sales rep's tone on a sales call. You get two independent signals:
 1. TEXT: what the rep said.
 2. VOICE: emotion2vec scores (0 to 1) for slices of the rep's audio, with timestamps.
 
 Rules:
-- Flag unprofessional wording (rude, dismissive, condescending, sarcastic, hostile, blaming the customer, cutting them off, profanity) even when the voice is calm. Use source "text".
+- Apply only these workspace text criteria: ${textCriteria}. Flag matching wording even when the voice is calm. Use source "text".
 - Flag a bad vocal tone (a clearly elevated negative emotion: ${NEGATIVE_EMOTIONS.join(", ")}; treat 0.5 or more as clearly elevated) even when the words are polite. Use source "voice".
+- Additional workspace tone rules: ${settings.customRules.trim() || "None."}
 - Do NOT average the two signals. Either one alone is enough to flag.
 - A voice flag's reason must name the emotion label and its score, for example "angry 0.72".
 - quote: the rep's exact words at that moment. timestamp: seconds from the start of the call.

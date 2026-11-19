@@ -11,6 +11,7 @@ import { prisma } from "./db.js";
 import { Prisma } from "./generated/prisma/client.js";
 import { runAnalysis, runPipeline, speakerTurns } from "./pipeline.js";
 import { audioDurationSec, isSupportedAudioFile } from "./audio.js";
+import { AnalysisSettingsSchema, parseAnalysisSettings } from "./analysis-settings.js";
 
 mkdirSync(config.uploadDir, { recursive: true });
 
@@ -60,6 +61,15 @@ app.post("/jobs", upload.single("file"), async (req, res) => {
     res.status(400).json({ error: 'Send a supported audio file (.wav, .mp3, .m4a, .mp4, .ogg, or .opus) in the multipart field "file".' });
     return;
   }
+  let analysisSettings;
+  try {
+    const rawSettings = typeof req.body.settings === "string" ? JSON.parse(req.body.settings) : req.body.settings;
+    analysisSettings = parseAnalysisSettings(rawSettings);
+  } catch {
+    await unlink(req.file.path).catch(() => {});
+    res.status(400).json({ error: "The analysis settings are invalid. Refresh the settings page and try again." });
+    return;
+  }
   let durationSec: number;
   try {
     durationSec = await audioDurationSec(req.file.path);
@@ -75,7 +85,7 @@ app.post("/jobs", upload.single("file"), async (req, res) => {
   }
 
   const job = await prisma.job.create({
-    data: { fileName: req.file.originalname, filePath: req.file.path, durationSec },
+    data: { fileName: req.file.originalname, filePath: req.file.path, durationSec, analysisSettings: analysisSettings as Prisma.InputJsonValue },
   });
   void runPipeline(job.id); // not awaited: runs in the background
   res.status(202).json({ jobId: job.id });
@@ -157,7 +167,7 @@ app.get("/jobs/:id/audio", async (req, res) => {
 
 // Override which speaker is the rep, then re-run only the steps after transcription.
 app.patch("/jobs/:id/rep-speaker", async (req, res) => {
-  const body = z.object({ speaker: z.string().min(1) }).safeParse(req.body);
+  const body = z.object({ speaker: z.string().min(1), analysisSettings: AnalysisSettingsSchema.optional() }).safeParse(req.body);
   if (!body.success) {
     res.status(400).json({ error: 'Send JSON like { "speaker": "speaker_1" }.' });
     return;
@@ -177,7 +187,16 @@ app.patch("/jobs/:id/rep-speaker", async (req, res) => {
     return;
   }
 
-  await prisma.job.update({ where: { id: job.id }, data: { repSpeaker: body.data.speaker, stage: "scoring_tone", error: null } });
+  const analysisSettings = body.data.analysisSettings ?? parseAnalysisSettings(job.analysisSettings);
+  await prisma.job.update({
+    where: { id: job.id },
+    data: {
+      repSpeaker: body.data.speaker,
+      analysisSettings: analysisSettings as Prisma.InputJsonValue,
+      stage: "scoring_tone",
+      error: null,
+    },
+  });
   void runAnalysis(job.id);
   res.status(202).json({ jobId: job.id });
 });

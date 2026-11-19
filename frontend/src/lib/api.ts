@@ -8,6 +8,9 @@ export interface Settings {
   voiceEnabled: boolean; voiceWeight: number; includeCustomerRequests: boolean;
   includeImpliedCommitments: boolean; minConfidence: number; actionItemRules: string;
 }
+type AnalysisSettings = Pick<Settings,
+  'negativeBehaviors' | 'customRules' | 'includeCustomerRequests' | 'includeImpliedCommitments' | 'minConfidence' | 'actionItemRules'
+>;
 export interface Call {
   id: string; fileName: string; uploadedAt: string; durationSec: number;
   status: 'processing' | 'ready' | 'failed'; progressStep?: ProgressStep;
@@ -63,7 +66,7 @@ export interface Job extends Omit<JobSummary, 'verdict' | 'actionItemCount'> {
   turns: { speaker: string; start: number; end: number; text: string }[];
   result: {
     overallEmotions: Record<string, number>;
-    actionItems: { owner: string; task: string; due: string | null; quote: string; timestamp: number }[];
+    actionItems: { owner: string; task: string; due: string | null; quote: string; timestamp: number; confidence?: number }[];
     verdict: { verdict: 'RED' | 'GREEN'; score: number; summary: string; flags: Flag[] };
   } | null;
 }
@@ -95,6 +98,9 @@ export function toCall(job: JobSummary): Call {
 
 // The UI's speaker picker uses "speaker-1" (first to talk), "speaker-2", ...; the backend uses Scribe ids like "speaker_0".
 const uiSpeakerId = (job: Job, speaker: string) => `speaker-${job.speakers.indexOf(speaker) + 1}`;
+const clarifySalesRep = (text: string) => text
+  .replace(/\bsales\s+rep\b/gi, match => /^sales/i.test(match) && match.charAt(0) === match.charAt(0).toUpperCase() ? 'Sales representative' : 'sales representative')
+  .replace(/\brep\b/gi, match => match.charAt(0) === match.charAt(0).toUpperCase() ? 'Sales representative' : 'sales representative');
 
 export function toCallDetail(job: Job): CallDetail {
   const rep = job.repSpeaker ?? '';
@@ -112,7 +118,7 @@ export function toCallDetail(job: Job): CallDetail {
     tone: {
       verdict: verdict?.verdict ?? 'GREEN',
       confidence: (verdict?.score ?? 0) / 100,
-      explanation: verdict?.summary ?? '',
+      explanation: clarifySalesRep(verdict?.summary ?? ''),
       evidence: (verdict?.flags ?? []).map((f, i) => ({
         id: `flag-${i}`, quote: f.quote, startSec: turnStart(f.timestamp), reason: f.reason,
         behavior: f.source === 'voice' ? 'Vocal tone' : 'Wording',
@@ -121,7 +127,7 @@ export function toCallDetail(job: Job): CallDetail {
     },
     transcript,
     actionItems: (result?.actionItems ?? []).map((a, i) => ({
-      id: `action-${i}`, text: a.task, quote: a.quote, startSec: turnStart(a.timestamp), owner: a.owner || null, deadline: a.due, confidence: null,
+      id: `action-${i}`, text: a.task, quote: a.quote, startSec: turnStart(a.timestamp), owner: a.owner ? clarifySalesRep(a.owner) : null, deadline: a.due, confidence: a.confidence ?? null,
     })),
   };
 }
@@ -135,11 +141,19 @@ export function validateUpload(file: Pick<File, 'name' | 'size'>): string | null
 }
 
 let settings = structuredClone(defaultSettings);
+const analysisSettings = (value: Settings): AnalysisSettings => ({
+  negativeBehaviors: value.negativeBehaviors,
+  customRules: value.customRules,
+  includeCustomerRequests: value.includeCustomerRequests,
+  includeImpliedCommitments: value.includeImpliedCommitments,
+  minConfidence: value.minConfidence,
+  actionItemRules: value.actionItemRules,
+});
 
 export const api = {
   async uploadCall(file: File): Promise<{ id: string }> {
     const error = validateUpload(file); if (error) throw new Error(error);
-    const form = new FormData(); form.append('file', file);
+    const form = new FormData(); form.append('file', file); form.append('settings', JSON.stringify(analysisSettings(api.restoreSettings())));
     const { jobId } = await request<{ jobId: string }>('/jobs', { method: 'POST', body: form });
     return { id: jobId };
   },
@@ -161,9 +175,13 @@ export const api = {
     const job = await request<Job>(`/jobs/${id}`);
     const speaker = input.repSpeakerId ? job.speakers[Number(input.repSpeakerId.replace('speaker-', '')) - 1] : job.repSpeaker;
     if (!speaker) throw new Error('That speaker does not appear in this call.');
-    await request(`/jobs/${id}/rep-speaker`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ speaker }) });
+    await request(`/jobs/${id}/rep-speaker`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ speaker, analysisSettings: analysisSettings(api.restoreSettings()) }),
+    });
   },
-  // Workspace settings still live in this browser only; the backend does not use them yet.
+  // Settings live in this browser and are snapshotted into each new or reanalyzed job.
   async getSettings(): Promise<Settings> { return structuredClone(settings); },
   restoreSettings(): Settings {
     const saved = localStorage.getItem('call-review-settings');
