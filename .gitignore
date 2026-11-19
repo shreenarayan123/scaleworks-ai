@@ -1,0 +1,16 @@
+# Secrets
+.env
+*.env.local
+
+# Python
+emo-env/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+backend/uploads/
+backend/src/generated/
+
+# Local runtime files
+*.log
