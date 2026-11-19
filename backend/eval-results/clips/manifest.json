@@ -1,0 +1,249 @@
+{
+  "modelId": "eleven_v3",
+  "voices": [
+    "CwhRBWXzGAHq8TQ4Fs17",
+    "EXAVITQu4vr4xnSDxMaL"
+  ],
+  "clips": [
+    {
+      "id": "01-calm-greeting",
+      "textRed": false,
+      "voiceRed": false,
+      "notes": "Calm, helpful opening.",
+      "inputs": [
+        {
+          "text": "Thanks for joining today. How has the pilot been going?",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Good overall, but our CRM fields are not syncing.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "02-polite-update",
+      "textRed": false,
+      "voiceRed": false,
+      "notes": "Polite status update.",
+      "inputs": [
+        {
+          "text": "The export is ready and I will send it this afternoon.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Perfect, thank you for the update.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "03-calm-problem",
+      "textRed": false,
+      "voiceRed": false,
+      "notes": "Calm explanation of a sync issue.",
+      "inputs": [
+        {
+          "text": "We found a configuration issue and can review it together.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "That would help us a lot.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "04-blame",
+      "textRed": true,
+      "voiceRed": false,
+      "notes": "Blames the customer.",
+      "inputs": [
+        {
+          "text": "That is your problem. You clearly did not follow the setup guide.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "We followed every step and need help.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "05-interruption",
+      "textRed": true,
+      "voiceRed": false,
+      "notes": "Cuts the customer off.",
+      "inputs": [
+        {
+          "text": "Stop you there. I am talking now.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "I was only explaining the issue.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "06-profanity",
+      "textRed": true,
+      "voiceRed": false,
+      "notes": "Uses profanity.",
+      "inputs": [
+        {
+          "text": "This is a damn waste of time. Fix it yourself.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "That response is not helpful.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "07-dismissive",
+      "textRed": true,
+      "voiceRed": false,
+      "notes": "Dismissive wording.",
+      "inputs": [
+        {
+          "text": "I do not have time for basic questions. Read the documentation.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "We need a little more guidance.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "08-angry-polite",
+      "textRed": false,
+      "voiceRed": true,
+      "notes": "Polite words with angry delivery cue.",
+      "inputs": [
+        {
+          "text": "[angry] I am happy to walk through the fix with you.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Thank you, that sounds good.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "09-shouting-help",
+      "textRed": false,
+      "voiceRed": true,
+      "notes": "Helpful words with elevated delivery cue.",
+      "inputs": [
+        {
+          "text": "[shouting] I can absolutely help you resolve this today!",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Okay, let us do that.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "10-sad-apology",
+      "textRed": false,
+      "voiceRed": true,
+      "notes": "Apology with distressed delivery cue.",
+      "inputs": [
+        {
+          "text": "[sad] I am sorry this has been frustrating for your team.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "We appreciate the apology.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "11-rude-angry",
+      "textRed": true,
+      "voiceRed": true,
+      "notes": "Both wording and delivery are negative.",
+      "inputs": [
+        {
+          "text": "[angry] Stop wasting my time. This is your fault.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "We need a constructive plan.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "12-sarcasm-neutral",
+      "textRed": true,
+      "voiceRed": false,
+      "notes": "Sarcastic wording with neutral cue.",
+      "inputs": [
+        {
+          "text": "Sure, because reading the guide always solves everything, right?",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "That sounds sarcastic.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "13-action-item",
+      "textRed": false,
+      "voiceRed": false,
+      "notes": "Neutral commitment and next step.",
+      "inputs": [
+        {
+          "text": "I will send the permissions checklist by Friday.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "We will send the sync logs today.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "14-urgent-angry",
+      "textRed": false,
+      "voiceRed": true,
+      "notes": "Urgent, raised delivery.",
+      "inputs": [
+        {
+          "text": "[excited] We need to solve this immediately and get everyone moving!",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Understood, we will prioritize it.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    },
+    {
+      "id": "15-calm-low-volume",
+      "textRed": false,
+      "voiceRed": true,
+      "notes": "Manually labeled negative low-volume acting; known emotion2vec weak spot.",
+      "inputs": [
+        {
+          "text": "[whispering] I can help review the issue and find a path forward.",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "text": "Thank you for staying with us.",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        }
+      ]
+    }
+  ]
+}
