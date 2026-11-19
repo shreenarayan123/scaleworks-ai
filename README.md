@@ -1,4 +1,4 @@
-# Sales Call Analyzer
+# Callertone
 
 A call review app that transcribes recordings, analyzes sales-rep tone, and extracts follow-up actions.
 

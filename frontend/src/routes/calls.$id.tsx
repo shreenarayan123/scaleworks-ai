@@ -8,7 +8,7 @@ import { api, dateLabel, timeLabel, type CallDetail } from '@/lib/api';
 import { callQuery } from '@/lib/queries';
 import { ErrorState, PageSkeleton, Processing, ToneBadge } from '@/components/review-ui';
 export const Route = createFileRoute('/calls/$id')({
- head: () => ({ meta: [{ title: 'Call analysis · Call Review' }, { name: 'description', content: 'Review the tone, supporting evidence, transcript, and action items from your customer call.' }, { property: 'og:title', content: 'Call analysis · Call Review' }, { property: 'og:description', content: 'Every moment in context. Every next step in one place.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
+ head: () => ({ meta: [{ title: 'Call analysis · Callertone' }, { name: 'description', content: 'Review the tone, supporting evidence, transcript, and action items from your customer call.' }, { property: 'og:title', content: 'Call analysis · Callertone' }, { property: 'og:description', content: 'Every moment in context. Every next step in one place.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
  loader: ({ context, params }) => context.queryClient.ensureQueryData(callQuery(params.id)), pendingComponent: PageSkeleton,
  errorComponent: ({ error, reset }) => <ErrorState message={error instanceof Error ? error.message : 'This call could not be loaded.'} retry={reset}/>, component: CallPage,
 });

@@ -9,7 +9,7 @@ import { api, dateLabel, timeLabel, validateUpload, progressSteps } from '@/lib/
 import { callsQuery, callStatsQuery } from '@/lib/queries';
 import { EmptyCalls, ErrorState, PageSkeleton, Status, ToneBadge } from '@/components/review-ui';
 export const Route = createFileRoute('/')({
-  head: () => ({ meta: [{ title: 'Calls · Call Review' }, { name: 'description', content: 'Review sales conversations, spot tone concerns, and keep track of every next step.' }, { property: 'og:title', content: 'Calls · Call Review' }, { property: 'og:description', content: 'A clearer view of your customer conversations.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
+  head: () => ({ meta: [{ title: 'Calls · Callertone' }, { name: 'description', content: 'Review sales conversations, spot tone concerns, and keep track of every next step.' }, { property: 'og:title', content: 'Calls · Callertone' }, { property: 'og:description', content: 'A clearer view of your customer conversations.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(callsQuery({ page: 1, pageSize: 10, search: '', filter: 'all', sort: 'newest' })),

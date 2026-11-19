@@ -9,7 +9,7 @@ import { api, defaultSettings, type Behavior, type Settings } from '@/lib/api';
 import { settingsQuery } from '@/lib/queries';
 import { ErrorState, PageSkeleton } from '@/components/review-ui';
 export const Route = createFileRoute('/settings')({
- head: () => ({ meta: [{ title: 'Workspace settings · Call Review' }, { name: 'description', content: 'Set the tone criteria and action item rules for your sales call reviews.' }, { property: 'og:title', content: 'Workspace settings · Call Review' }, { property: 'og:description', content: 'Make your call analyses reflect what matters to your team.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
+ head: () => ({ meta: [{ title: 'Workspace settings · Callertone' }, { name: 'description', content: 'Set the tone criteria and action item rules for your sales call reviews.' }, { property: 'og:title', content: 'Workspace settings · Callertone' }, { property: 'og:description', content: 'Make your call analyses reflect what matters to your team.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
  loader: ({ context }) => context.queryClient.ensureQueryData(settingsQuery()).then(() => undefined), pendingComponent: PageSkeleton,
  errorComponent: ({ error, reset }) => <ErrorState message={error instanceof Error ? error.message : 'Settings could not be loaded.'} retry={reset}/>, component: SettingsPage,
 });

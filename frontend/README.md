@@ -1,4 +1,4 @@
-# Call Review frontend
+# Callertone frontend
 
 The frontend provides the calls dashboard, individual call analysis, and workspace settings. It is a React and TypeScript app built with Vite and TanStack Start.
 
