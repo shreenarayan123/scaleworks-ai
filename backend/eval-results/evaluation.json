@@ -18,7 +18,8 @@
         "summary": "The rep opened the call politely and asked about the pilot in a professional manner. Voice analysis shows a fully neutral tone with no elevated negative emotions. No flags were raised.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "8a29ebd6-bbdf-45f5-be7a-3442f19e2f47",
@@ -37,7 +38,8 @@
         "summary": "The rep opened the call politely and asked about the pilot in a professional manner. Voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were found.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "6d2d5dd2-c016-46f7-95cb-a0fc54cc05ec",
@@ -56,7 +58,8 @@
         "summary": "The rep opened the call politely by thanking the customer and asking how the pilot has been going. The text contains no rude or dismissive wording, and the voice analysis shows a fully neutral tone with no elevated negative emotion.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "b0654bba-4f12-42a3-8865-16b3732a2f63",
@@ -75,7 +78,8 @@
         "summary": "The rep opened the call politely and asked about the pilot in a professional manner. Voice analysis shows a fully neutral tone with no elevated negative emotions. No flags were raised.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "f82a83d5-7b44-46d0-97cf-e3ca586be982",
@@ -94,7 +98,8 @@
         "summary": "The rep opened the call politely and asked about the pilot in a professional manner. Voice analysis shows a fully neutral tone with no elevated negative emotions. No issues were found.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "c3b9ff2c-991d-4d64-ba4c-f79cc45b3424",
@@ -113,7 +118,8 @@
         "summary": "The rep's wording was professional and straightforward, simply confirming the export would be sent. The voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "856c11a7-d65f-482f-83a6-b9f9a59bb82c",
@@ -132,7 +138,8 @@
         "summary": "The rep's wording was professional and straightforward, simply confirming the export would be sent. Voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "e066eea9-2874-4e1f-bfdb-69318bb78f00",
@@ -151,7 +158,8 @@
         "summary": "The rep's wording was professional and straightforward, simply confirming the export would be sent. Voice analysis showed fully neutral delivery with no elevated negative emotions. No flags were raised.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "0b3f05ac-08a9-4502-8b1f-bf6faf379a38",
@@ -170,7 +178,8 @@
         "summary": "The rep's wording was professional and straightforward, simply confirming the export would be sent. Voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "17bbce57-8ea2-46b8-866f-b39ac9161203",
@@ -189,7 +198,8 @@
         "summary": "The rep's wording was professional and straightforward, simply confirming the export would be sent. Voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were warranted.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "a5eec2aa-7f86-4f6a-9333-640fc931d9ee",
@@ -208,7 +218,8 @@
         "summary": "The rep's wording is professional and collaborative, offering to review the configuration issue together. The voice analysis shows a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "a7009c60-7a62-4a30-9d97-ce22ff1275ee",
@@ -227,7 +238,8 @@
         "summary": "The rep's wording is professional and collaborative, offering to review the configuration issue together. The voice analysis shows a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "711e4c6e-64fd-4f0a-ace8-8c22b33120f4",
@@ -246,7 +258,8 @@
         "summary": "The rep's wording is polite and collaborative, offering to review the configuration issue together. The voice analysis shows fully neutral delivery with no elevated negative emotions. No unprofessional wording or bad vocal tone was detected.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "511531a5-2b44-46ba-b46d-0ca6ac3c8954",
@@ -265,7 +278,8 @@
         "summary": "The rep's wording is professional and collaborative, offering to review the configuration issue together without any rude or dismissive language. The voice analysis shows a fully neutral tone with no elevated negative emotions.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "8a40712c-6901-48a5-939f-da01263fc826",
@@ -284,7 +298,8 @@
         "summary": "The rep's wording is professional and collaborative, offering to review the configuration issue together. The voice analysis shows a fully neutral tone with no elevated negative emotions. No flags were triggered.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "3ac7da4f-1386-4f05-82df-37580a15a309",
@@ -316,7 +331,8 @@
         "summary": "The rep's words blame and dismiss the customer even though the vocal tone is neutral. Saying 'That is your problem' and accusing the customer of not following the setup guide is unprofessional and condescending.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "c8147aa4-f97f-4a7c-8b53-c92d2e4c7bc6",
@@ -348,7 +364,8 @@
         "summary": "The rep's words are dismissive and blame the customer directly, saying 'That is your problem' and accusing the customer of not following the setup guide. The vocal tone itself is neutral, but the unprofessional wording alone is enough to flag. Overall this is an unprofessional interaction driven by the text.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "aeeed136-2d42-4f77-a5fe-91eef1ba3cd0",
@@ -380,7 +397,8 @@
         "summary": "The rep's words blame and dismiss the customer, saying 'That is your problem' and accusing them of not following the setup guide. Even though the vocal tone is completely neutral, the unprofessional wording alone is enough to flag. No voice-based flags since all negative emotion scores are near zero.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "2947a977-b027-4819-8b58-b53ac6b4afb9",
@@ -412,7 +430,8 @@
         "summary": "The rep's words blame and dismiss the customer, saying 'That is your problem' and accusing the customer of not following the setup guide. The vocal tone itself is neutral, but the unprofessional wording alone is enough to flag. Overall the call comes across as blaming rather than helpful.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "d44c57d9-5077-42f6-a8a6-74748320fb4d",
@@ -444,7 +463,8 @@
         "summary": "The rep's words are dismissive and blame the customer directly, saying 'That is your problem' and accusing them of not following the setup guide. The vocal tone itself is neutral and calm, but the unprofessional wording alone warrants a flag.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "c51d45b5-8001-4b93-a851-c7b2b1289a17",
@@ -476,7 +496,8 @@
         "summary": "The rep cuts the customer off and then says 'I am talking now,' which comes across as dismissive and controlling even though the vocal tone stays neutral. Voice scores show no elevated negative emotion, so the flag rests entirely on the wording.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "e263ed3d-fb8a-419b-aae9-64548a5bc67e",
@@ -502,7 +523,8 @@
         "summary": "The rep interrupts the customer and asserts 'I am talking now', which comes across as cutting the customer off and dismissive. The vocal tone itself is neutral, so no voice flag is raised. The unprofessional wording alone is enough for a RED verdict.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "14c20b96-bd2d-4287-aa2d-faa74958ce06",
@@ -528,7 +550,8 @@
         "summary": "The rep cuts the customer off mid-sentence and asserts dominance by saying 'I am talking now,' which is dismissive and unprofessional even though the vocal tone stays neutral. Voice scores show no elevated negative emotion, so the flag comes from the text alone.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "68ec0712-bd3a-438a-b08b-c9473722f4af",
@@ -554,7 +577,8 @@
         "summary": "The rep cuts the customer off mid-sentence and then asserts 'I am talking now', which comes across as dismissive and controlling even though the vocal tone stays neutral. The voice scores show no elevated negative emotion, so the flag rests entirely on the wording.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "6f678a3f-9a95-445a-8274-e24e778e321a",
@@ -580,7 +604,8 @@
         "summary": "The rep cuts the customer off and says 'I am talking now,' which reads as dismissive and condescending even though the vocal tone is calm and neutral. The voice scores show no elevated negative emotion, so the flag comes from the wording alone.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "e6e8848a-284e-4efa-a3cb-b070de31ea9e",
@@ -612,7 +637,8 @@
         "summary": "The rep used profanity and dismissed the customer by telling them to fix the problem themselves, which is rude and unprofessional. The vocal tone itself was neutral, but the wording alone is enough to flag. Overall the call comes across as hostile and dismissive.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "9fc7b1db-50ec-4766-b7f1-c5bb5d621c59",
@@ -644,7 +670,8 @@
         "summary": "The rep used profanity and dismissed the customer with hostile, unhelpful wording. The vocal tone itself was neutral, but the text alone is enough to flag. Both statements blame and brush off the customer.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "a050cfeb-7347-4c31-bfe8-eeca3057dd9d",
@@ -676,7 +703,8 @@
         "summary": "The rep used profanity and dismissed the customer by telling them to fix the problem themselves, which is rude and unhelpful. The vocal tone was neutral throughout, but the unprofessional wording alone warrants a red flag.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "f924cad4-b2e1-4170-8461-89efa5de9acf",
@@ -708,7 +736,8 @@
         "summary": "The rep used profanity and dismissed the customer with rude, unhelpful wording, which is unprofessional regardless of vocal delivery. The voice analysis shows a neutral tone, but the text alone is enough to flag the call.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "b0effa92-651c-4988-94f3-35a5971c2a06",
@@ -740,7 +769,8 @@
         "summary": "The rep used profanity and a dismissive, hostile tone in the wording, telling the customer to fix it themselves. The vocal delivery was neutral, but the unprofessional text alone is enough to flag. Overall this is a clear red-flag call.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "601e6d99-886e-42ce-8ad5-8f1bb68985ef",
@@ -772,7 +802,8 @@
         "summary": "The rep's wording is dismissive and rude, telling the customer there is no time for basic questions and bluntly deflecting them to the documentation. The vocal tone itself is neutral, but the unprofessional text alone is enough to flag. Overall the interaction comes across as impatient and condescending toward the customer.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "b022f17e-a251-477c-b4bb-9e622357b6d2",
@@ -804,7 +835,8 @@
         "summary": "The rep's words are dismissive and rude, telling the customer their questions are not worth the rep's time and brushing them off to the documentation. The vocal tone itself is neutral, but the unprofessional wording alone is enough to flag. Overall the call shows poor customer treatment by the rep.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "4319c769-3e9b-4783-b887-42884eb4a893",
@@ -836,7 +868,8 @@
         "summary": "The rep's words are dismissive and rude, telling the customer their questions are not worth the rep's time and brushing them off to the documentation. The vocal tone itself is neutral, but the unprofessional wording alone is enough to flag. Overall the interaction comes across as condescending and unhelpful.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "c59f4a89-f1c4-407c-9a28-e337fb82f70f",
@@ -868,7 +901,8 @@
         "summary": "The rep was dismissive and rude, stating there is no time for the customer's basic questions and curtly directing them to read the documentation. The vocal delivery itself was neutral, but the unprofessional wording alone warrants a flag.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "cccd769d-9252-428f-8a1b-d2eab7c1dc38",
@@ -900,7 +934,8 @@
         "summary": "The rep was dismissive and rude, stating they did not have time for the customer's basic questions and curtly telling them to read the documentation. The vocal tone itself was neutral, but the unprofessional wording alone warrants a red flag.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "2cd1f400-6687-4985-8538-1b01aae10de5",
@@ -919,7 +954,8 @@
         "summary": "The rep's wording was polite and professional, offering help without any rude or dismissive language. Voice analysis shows a strongly positive tone (happy 0.92) with all negative emotions well below the threshold. No flags were raised.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "c1bef8d2-2396-4d69-bbc1-20da0cde8cb5",
@@ -938,7 +974,8 @@
         "summary": "The rep's wording is polite and cooperative, offering to walk through the fix. The voice analysis shows no elevated negative emotions, with happy dominating at 0.92 and all negative labels well below threshold. No flags were found.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "320e1cd0-518f-4dc0-9686-723af77a3a15",
@@ -957,7 +994,8 @@
         "summary": "The rep's wording is polite and cooperative, offering to walk through the fix. The voice analysis shows no elevated negative emotions, with happy dominating at 0.92 and all negative labels well below threshold. No flags were found.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "7d913b46-cae2-4f39-9bf8-b8bfedc31c90",
@@ -976,7 +1014,8 @@
         "summary": "The rep's wording is polite and professional, offering help without any rude or dismissive language. The voice analysis shows no elevated negative emotions, with happy dominating at 0.92 and all negative labels well below the 0.5 threshold.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "509a3f51-2dac-46b3-895b-0537d288a8ed",
@@ -995,7 +1034,8 @@
         "summary": "The rep's wording is polite and cooperative, offering to walk through the fix. The voice analysis shows no elevated negative emotions, with happy dominating at 0.92 and all negative labels well below threshold. No flags are warranted.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "1b12c6b9-350c-49af-b07b-e15a160918fb",
@@ -1021,7 +1061,8 @@
         "summary": "The rep's words are polite and helpful, but the voice analysis shows a clearly elevated angry tone (angry 1.00) throughout the statement. Per the rules, an elevated negative vocal tone alone is enough to flag even when the wording is courteous.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "29f5dba9-4758-457f-8834-a746f565af1d",
@@ -1047,7 +1088,8 @@
         "summary": "The rep's words were polite and helpful, but the voice analysis shows a clearly elevated angry tone (angry 1.00) throughout the statement. Per the rules, an elevated negative vocal tone alone is enough to flag. Overall verdict is RED.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "ceb523c5-d816-4a56-bdf5-cb69bcc91169",
@@ -1073,7 +1115,8 @@
         "summary": "The rep's words are polite and helpful, but the voice analysis shows a clearly elevated angry tone (angry 1.00) throughout the statement. Per the rules, an elevated negative vocal emotion alone is enough to flag. The verdict is RED based on this single strong voice signal.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "ff193bdb-ef48-4924-b5f0-910cd2be19ff",
@@ -1099,7 +1142,8 @@
         "summary": "The rep's words are polite and helpful, but the voice analysis shows a clearly elevated angry tone (angry 1.00) throughout the statement. Per the rules, an elevated negative vocal emotion alone is enough to flag. The verdict is RED based on this vocal tone issue.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "bbfb4656-b706-4749-8edd-1f2f09d14af6",
@@ -1125,7 +1169,8 @@
         "summary": "The rep's words are polite and helpful, but the voice analysis shows a clearly elevated angry tone (angry 1.00) throughout the statement. Per the rules, a strongly negative vocal tone alone is enough to flag even when the wording is fine.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "d4ad862b-6b52-4a14-b3d9-c061c3b44c82",
@@ -1151,7 +1196,8 @@
         "summary": "The rep's words are polite and apologetic, so the text itself raises no concern. However, the voice analysis shows a clearly elevated sad tone (sad 1.00), which meets the threshold for a vocal-tone flag. The combination of courteous wording delivered in a strongly negative emotional tone warrants a RED verdict.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "880166d0-d078-4c54-84cd-dc4eff865e36",
@@ -1177,7 +1223,8 @@
         "summary": "The rep's words are polite and apologetic, but the voice analysis shows a clearly elevated sad tone (sad 1.00), which meets the threshold for a vocal-tone flag. Because either signal alone is enough to flag, the verdict is RED despite the courteous wording.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "39732101-e6f1-49b0-88b7-b0fc62875ee8",
@@ -1203,7 +1250,8 @@
         "summary": "The rep's words are polite and apologetic, so the text itself raises no concerns. However, the voice analysis shows a strongly elevated sad tone (sad 1.00) during the apology, which meets the threshold for a vocal tone flag.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "1917d98e-58f3-4df4-8bea-943191483d91",
@@ -1229,7 +1277,8 @@
         "summary": "The rep's words are polite and apologetic, so the text itself raises no concern. However, the voice analysis shows a strongly elevated sad tone (sad 1.00), which meets the threshold for a vocal-tone flag. The combination of courteous wording delivered in a clearly negative emotional tone results in a RED verdict.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "9e0c095a-ff2f-4e1d-b17f-583085f6b63b",
@@ -1255,7 +1304,8 @@
         "summary": "The rep's words are polite and apologetic, so no text issue was found. However, the voice analysis shows a clearly elevated sad emotion (sad 1.00) while speaking, which meets the threshold for a vocal tone flag. Per the rules, this voice signal alone is enough to flag the call.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "b3882d4b-48be-4e8d-8505-6ed18e52f07f",
@@ -1287,7 +1337,8 @@
         "summary": "The rep's words were rude and dismissive, telling the customer to stop wasting the rep's time and directly blaming them. Although the vocal tone stayed neutral, the unprofessional wording alone is enough to flag. Overall this is an unprofessional interaction.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "dae0c136-95fa-44ab-a861-c8dca6a765e1",
@@ -1319,7 +1370,8 @@
         "summary": "The rep's words were dismissive and blaming, telling the customer to stop wasting the rep's time and saying the problem was the customer's fault. Although the vocal tone stayed neutral, the unprofessional wording alone is enough to flag. Verdict is RED based on two text flags.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "a8b24d45-b347-48f9-a56d-edbb730e90e5",
@@ -1351,7 +1403,8 @@
         "summary": "The rep's words are unprofessional despite a calm voice. The rep tells the customer to stop wasting the rep's time and then blames the customer directly. No vocal tone issue was detected since the voice was neutral.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "5935d024-8dba-446c-a0dd-e9067b10d9a9",
@@ -1383,7 +1436,8 @@
         "summary": "The rep's words were unprofessional even though the vocal tone stayed neutral. The rep told the customer to stop wasting the rep's time and then blamed the customer directly. No voice flags since all negative emotion scores were below 0.5.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "92e91694-03d3-4299-a027-236d4b0acabd",
@@ -1415,7 +1469,8 @@
         "summary": "The rep's words are rude and blaming: telling the customer to stop wasting the rep's time and asserting the problem is the customer's fault. Although the vocal tone is neutral, the unprofessional wording alone is enough to flag. Verdict is RED based on the text signal.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "4d9a7104-fd4d-4fac-85a5-1e597c15706b",
@@ -1441,7 +1496,8 @@
         "summary": "The rep used a sarcastic, dismissive remark toward the customer, which warrants a flag based on the text alone. The vocal tone itself was neutral, so no voice-based flag is needed.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "61707473-864c-4f24-8336-9dbae403aa10",
@@ -1467,7 +1523,8 @@
         "summary": "The rep's wording is sarcastic and dismissive, mocking the idea that reading the guide could help, which comes across as condescending toward the customer. The vocal tone itself was neutral, but the unprofessional text alone warrants a flag.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "0bd528e4-ffdd-425e-89c9-410778cf1b7e",
@@ -1493,7 +1550,8 @@
         "summary": "The rep's words are sarcastic and dismissive, mocking the idea that reading the guide helps, which comes across as condescending toward the customer. The vocal tone itself was neutral, but the unprofessional wording alone is enough to flag.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "53e44265-4415-47a2-9e30-5c72ad1edc2b",
@@ -1519,7 +1577,8 @@
         "summary": "The rep's wording is sarcastic and dismissive toward the customer, which warrants a text flag even though the vocal delivery was neutral. No negative vocal tone reached the threshold, so there are no voice flags.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "a63c4ac4-bd1f-4566-9f9b-0c84db58caf5",
@@ -1545,7 +1604,8 @@
         "summary": "The rep used a sarcastic, dismissive remark toward the customer, which is unprofessional wording even though the delivery sounded neutral. The voice analysis showed no elevated negative emotions, so only the text signal was flagged.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "86d8e563-e859-466c-945d-0335466a686e",
@@ -1564,7 +1624,8 @@
         "summary": "The rep gave a clear, courteous commitment to send the permissions checklist by Friday. The text contains no unprofessional wording, and the voice analysis shows fully neutral delivery with no elevated negative emotions.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "bc294f86-3e63-4bcd-baa3-db33618e92de",
@@ -1583,7 +1644,8 @@
         "summary": "The rep's wording was professional and appropriate, committing to send the permissions checklist by Friday. The vocal tone was entirely neutral with no elevated negative emotions detected. There is nothing to flag.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "69173427-4fed-47fc-b57f-fd4436c38909",
@@ -1602,7 +1664,8 @@
         "summary": "The rep's wording was professional and courteous, with no rude or dismissive language. The vocal tone was entirely neutral, with no negative emotion reaching an elevated level.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "655850a8-2b12-41e8-a28e-aa5f1efa7eb6",
@@ -1621,7 +1684,8 @@
         "summary": "The rep's wording was professional and appropriate, simply committing to send the permissions checklist by Friday. The vocal tone was entirely neutral with no negative emotion detected. There is nothing to flag.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "f7392050-d83c-4496-b507-9b20ca8f68cb",
@@ -1640,7 +1704,8 @@
         "summary": "The rep's wording was professional and appropriate, simply committing to send the permissions checklist by Friday. The vocal tone was entirely neutral with no negative emotion detected. There is nothing to flag.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "bcc4519c-2041-4a4e-910d-9b3d9bb06c76",
@@ -1666,7 +1731,8 @@
         "summary": "The rep's words themselves are acceptable, though demanding in urgency. However, the voice analysis shows a clearly elevated angry tone (angry 0.60), which crosses the threshold for a bad vocal tone. This alone is enough to flag the call.",
         "verdict": "RED"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "3ba7ef29-9797-4fb1-a8ba-5b74fc0a9338",
@@ -1692,7 +1758,8 @@
         "summary": "The rep's words themselves are acceptable, but the voice analysis shows clearly elevated anger (angry 0.60) during the statement. That vocal tone alone is enough to flag the call. Verdict is RED based on the voice signal.",
         "verdict": "RED"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "6db15d8a-a77d-404d-9a6b-ae34e166a324",
@@ -1718,7 +1785,8 @@
         "summary": "The rep's words are acceptable, but the vocal tone is clearly angry (0.60), which meets the threshold for a voice flag. No unprofessional wording was found in the text itself.",
         "verdict": "RED"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "a4218428-a10b-412a-99ab-9c2d801b70b6",
@@ -1744,7 +1812,8 @@
         "summary": "The rep's words themselves are professional, but the voice analysis shows clearly elevated anger (angry 0.60) while speaking, which crosses the 0.5 threshold for a bad vocal tone. That voice signal alone is enough to flag the call.",
         "verdict": "RED"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "acd4e4a1-646a-43cc-9542-22232bf24c52",
@@ -1770,7 +1839,8 @@
         "summary": "The rep's words are professional, but the voice analysis shows a clearly elevated angry tone (angry 0.60) while speaking. Per the rules, an elevated negative vocal emotion alone is enough to flag. The overall tone should be reviewed.",
         "verdict": "RED"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     },
     {
       "jobId": "bff9b09a-bfaf-4fb2-a85e-386484c50072",
@@ -1789,7 +1859,8 @@
         "summary": "The rep used polite, solution-focused language with no unprofessional wording. Voice analysis shows a fully neutral tone with zero negative emotion across the segment. Nothing warrants a flag.",
         "verdict": "GREEN"
       },
-      "run": 1
+      "run": 1,
+      "stage": "done"
     },
     {
       "jobId": "a5828029-175b-4250-86bc-61459efecf6f",
@@ -1808,7 +1879,8 @@
         "summary": "The rep's wording was polite and solution-oriented, offering to review the issue and find a path forward. The vocal tone was entirely neutral with no negative emotion detected. There is nothing to flag.",
         "verdict": "GREEN"
       },
-      "run": 2
+      "run": 2,
+      "stage": "done"
     },
     {
       "jobId": "e15bc614-1b29-47ca-936b-a9dbb881b9fe",
@@ -1827,7 +1899,8 @@
         "summary": "The rep's wording was polite and solution-oriented, offering to review the issue and find a path forward. The voice analysis shows a fully neutral tone with no negative emotion above the flagging threshold. There is nothing to flag.",
         "verdict": "GREEN"
       },
-      "run": 3
+      "run": 3,
+      "stage": "done"
     },
     {
       "jobId": "7351ffad-a1bf-496a-aed0-5a57db6613b3",
@@ -1846,7 +1919,8 @@
         "summary": "The rep used polite, solution-focused language with no unprofessional wording. Voice analysis shows a fully neutral tone with zero negative emotion across the segment. Nothing warrants a flag.",
         "verdict": "GREEN"
       },
-      "run": 4
+      "run": 4,
+      "stage": "done"
     },
     {
       "jobId": "eda97e3b-37b8-4bfc-899c-3d04aa99b0e8",
@@ -1865,125 +1939,216 @@
         "summary": "The rep used polite, solution-focused language with no rude or dismissive wording. Voice analysis showed a fully neutral tone with no elevated negative emotions. No flags were warranted.",
         "verdict": "GREEN"
       },
-      "run": 5
+      "run": 5,
+      "stage": "done"
     }
   ],
   "metrics": {
     "text": {
-      "tp": 0,
+      "tp": 30,
       "fp": 0,
-      "tn": 0,
+      "tn": 45,
       "fn": 0,
-      "precision": 0,
-      "recall": 0
+      "precision": 1.0,
+      "recall": 1.0
     },
     "voice": {
-      "tp": 0,
+      "tp": 15,
       "fp": 0,
-      "tn": 0,
-      "fn": 0,
-      "precision": 0,
-      "recall": 0
+      "tn": 45,
+      "fn": 15,
+      "precision": 1.0,
+      "recall": 0.5
     },
     "combined": {
-      "tp": 0,
+      "tp": 45,
       "fp": 0,
-      "tn": 0,
-      "fn": 0,
-      "precision": 0,
-      "recall": 0
+      "tn": 20,
+      "fn": 10,
+      "precision": 1.0,
+      "recall": 0.8181818181818182
     }
   },
   "stability": [
     {
       "id": "01-calm-greeting",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "02-polite-update",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "03-calm-problem",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "04-blame",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "05-interruption",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "06-profanity",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "07-dismissive",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "08-angry-polite",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "09-shouting-help",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "10-sad-apology",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "11-rude-angry",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "12-sarcasm-neutral",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "13-action-item",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "14-urgent-angry",
-      "verdicts": [],
+      "verdicts": [
+        "RED",
+        "RED",
+        "RED",
+        "RED",
+        "RED"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     },
     {
       "id": "15-calm-low-volume",
-      "verdicts": [],
+      "verdicts": [
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN",
+        "GREEN"
+      ],
       "changes": 0,
-      "distinct": 0
+      "distinct": 1
     }
   ]
 }
