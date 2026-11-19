@@ -66,6 +66,8 @@ The combined classifier had no false positives in this sample. Its 10 false nega
 
 ## Run locally
 
+For Cloud Run and Vercel deployment configuration, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 Install Node dependencies once:
 
 ```powershell

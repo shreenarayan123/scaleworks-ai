@@ -1,0 +1,71 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: callertone-api
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "5"
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 1
+      timeoutSeconds: 900
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT_ID/callertone/backend:latest
+          ports:
+            - name: http1
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          env:
+            - name: PORT
+              value: "8080"
+            - name: UPLOAD_DIR
+              value: /mnt/audio
+            - name: EMOTION_SERVICE_URL
+              value: https://EMOTION_SERVICE_URL
+            - name: EMOTION_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: EMOTION_SERVICE_TOKEN
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: DATABASE_URL
+            - name: ELEVENLABS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: ELEVENLABS_API_KEY
+            - name: GLM_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: GLM_BASE_URL
+            - name: GLM_MODEL
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: GLM_MODEL
+            - name: GLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: GLM_API_KEY
+            - name: CORS_ORIGIN
+              value: https://YOUR_VERCEL_DOMAIN
+          volumeMounts:
+            - name: recordings
+              mountPath: /mnt/audio
+      volumes:
+        - name: recordings
+          csi:
+            driver: gcsfuse.run.googleapis.com
+            volumeAttributes:
+              bucketName: YOUR_RECORDINGS_BUCKET
+              mountOptions: implicit-dirs

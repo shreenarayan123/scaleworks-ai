@@ -21,6 +21,7 @@ export const config = {
   injectScribeTimeout: process.env.INJECT_SCRIBE_TIMEOUT === "true",
   injectGlmInvalidJson: process.env.INJECT_GLM_INVALID_JSON === "true",
   emotionServiceUrl: process.env.EMOTION_SERVICE_URL ?? "http://127.0.0.1:8001",
+  emotionServiceToken: process.env.EMOTION_SERVICE_TOKEN ?? "",
   corsOrigin: process.env.CORS_ORIGIN ?? "*",
   // true = canned Scribe and GLM responses (the emotion service is still called for real)
   mockExternal,

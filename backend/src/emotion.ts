@@ -36,6 +36,7 @@ export async function scoreSegments(filePath: string, segments: Utterance[]): Pr
 
   const res = await fetch(`${config.emotionServiceUrl}/score`, {
     method: "POST",
+    headers: config.emotionServiceToken ? { Authorization: `Bearer ${config.emotionServiceToken}` } : undefined,
     body: form,
     signal: AbortSignal.timeout(config.externalTimeoutMs),
   });

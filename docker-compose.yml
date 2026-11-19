@@ -1,0 +1,46 @@
+services:
+  emotion-service:
+    build:
+      context: ./emotion-service
+    environment:
+      PORT: "8080"
+      EMOTION_SERVICE_TOKEN: ${EMOTION_SERVICE_TOKEN:?Set EMOTION_SERVICE_TOKEN in .env.docker}
+    expose:
+      - "8080"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=5)"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10m
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      PORT: "8080"
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env.docker}
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:?Set ELEVENLABS_API_KEY in .env.docker}
+      GLM_BASE_URL: ${GLM_BASE_URL:?Set GLM_BASE_URL in .env.docker}
+      GLM_MODEL: ${GLM_MODEL:?Set GLM_MODEL in .env.docker}
+      GLM_API_KEY: ${GLM_API_KEY:?Set GLM_API_KEY in .env.docker}
+      EMOTION_SERVICE_URL: http://emotion-service:8080
+      EMOTION_SERVICE_TOKEN: ${EMOTION_SERVICE_TOKEN:?Set EMOTION_SERVICE_TOKEN in .env.docker}
+      CORS_ORIGIN: ${CORS_ORIGIN:?Set CORS_ORIGIN in .env.docker}
+      UPLOAD_DIR: /app/uploads
+    depends_on:
+      emotion-service:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      - recordings:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  recordings:

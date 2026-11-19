@@ -17,7 +17,7 @@ import sys
 import tempfile
 import threading
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from pydantic import BaseModel, ValidationError
 
 MODEL_ID = os.getenv("EMOTION_MODEL", "iic/emotion2vec_plus_base")
@@ -39,6 +39,7 @@ model_lock = threading.Lock()  # one inference at a time on the shared model
 print("Model loaded.", flush=True)
 
 app = FastAPI(title="emotion-service")
+SERVICE_TOKEN = os.getenv("EMOTION_SERVICE_TOKEN", "")
 
 
 class Segment(BaseModel):
@@ -81,7 +82,9 @@ def health():
 
 # A plain `def` (not async) so FastAPI runs this blocking work in a thread pool.
 @app.post("/score")
-def score(audio: UploadFile = File(...), segments: str = Form(...)):
+def score(audio: UploadFile = File(...), segments: str = Form(...), authorization: str | None = Header(default=None)):
+    if SERVICE_TOKEN and authorization != f"Bearer {SERVICE_TOKEN}":
+        raise HTTPException(401, "Unauthorized")
     try:
         items = [Segment(**s) for s in json.loads(segments)]
     except (json.JSONDecodeError, TypeError, ValidationError) as e:
