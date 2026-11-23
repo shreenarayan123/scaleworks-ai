@@ -107,26 +107,21 @@ npm run dev --prefix frontend
 
 The uploader accepts WAV, MP3, M4A, MP4, OGG, and OPUS files up to 200 MB. Corrupt files and files without an audio stream are rejected before analysis.
 
-## Long-call chunking POC
+## Long-call processing (up to 1 hour)
 
-The app accepts calls up to one hour by default (and files up to 200 MB). Scribe's batch API documents larger provider limits, but those are not app limits. Each call is one Scribe request, preserving one diarization namespace. Before sending, FFmpeg makes a temporary mono 16 kHz Opus copy at 24 kbps; the original remains stored for playback and retries. Scribe uses `SCRIBE_TIMEOUT_MS` (20 minutes by default). Node 22.23.2 bundles Undici 6.28.0, whose default 300-second header and body timers are overridden for Scribe with a dedicated Agent set 30 seconds above that deadline. Structured `[scribe]` logs record file sizes, duration, compression/upload/response times, status, and classified failures. The app uses Scribe diarization and assesses the rep role itself; it does not enable the provider's optional `detect_speaker_roles` mode. See the [Scribe API limits and parameters](https://elevenlabs.io/docs/api-reference/speech-to-text/convert) and [batch concurrency guidance](https://elevenlabs.io/docs/overview/capabilities/speech-to-text/).
-
-### Current one-hour call capability and limits
-
-- **Upload ceiling:** one hour and 200 MB by default; both are configurable with `MAX_DURATION_SEC` and `MAX_FILE_SIZE_BYTES`. A 56:08 test recording (53.9 MB) passed validation.
-- **Transcription:** a single synchronous Scribe request for the whole call. In that test, FFmpeg preparation took 36.6 seconds, upload took 2.8 seconds, and Scribe returned 9,764 words about 31 seconds after the request began. The configured request timeout is 20 minutes. This is one successful measurement, not a guaranteed latency.
-- **Voice scoring:** calls longer than 5.5 minutes are cut into silence-aligned chunks around five minutes each. The one-hour call produced 11 chunks; up to three chunks are sent concurrently by default. Only rep speech is scored; utterances shorter than 1.5 seconds are dropped and long utterances are divided into at most 10-second segments. One observed chunk took about 130 seconds, but full voice-stage duration was not captured.
-- **Speaker choice:** Scribe supplies speaker IDs and word timestamps. The backend assesses who is the sales rep from speaker evidence and conversational patterns. If the top candidate is weak or too close to another candidate, analysis pauses at `needs_speaker_confirmation`; a reviewer chooses the rep, then the app reruns analysis without retranscribing. This is a heuristic with no measured real-call accuracy yet. A wrong rep selection affects which voice is scored and which lines are treated as the rep in tone/action analysis.
-- **Recovery and persistence:** transcript and scores are checkpointed. A worker heartbeat runs every 10 seconds; startup and periodic sweeps reclaim jobs with no heartbeat for 60 seconds. Interrupted emotion work recomputes the stage's chunks. Original audio must remain available in `UPLOAD_DIR` or the configured Cloud Storage mount for retries.
-- **Important service limits:** the emotion model runs on CPU, and actual throughput depends on the host and model service capacity. The 20-minute emotion timeout applies per chunk request. The observed first run also hit a Prisma transaction-start failure while writing the transcript; word writes have since been changed to batches of 1,000, but the shared log does not show a complete successful one-hour end-to-end run after that fix.
+- **Limits:** uploads are capped at 1 hour and 200 MB by default (`MAX_DURATION_SEC`, `MAX_FILE_SIZE_BYTES`). The latest 60-minute test completed end-to-end without a retry or processing failure.
+- **Transcription:** FFmpeg prepares a compact mono 16 kHz Opus copy; the full call is sent once to Scribe for transcript, word timestamps, and speaker IDs. The app timeout is 20 minutes by default.
+- **Speaker selection:** the backend estimates which Scribe speaker is the sales rep from transcript evidence. If confidence is low or candidates are close, the job pauses for reviewer confirmation; a manual override is available.
+- **Voice analysis:** calls over 5.5 minutes are cut into silence-aligned chunks of about five minutes. Rep-only speech is scored by emotion2vec, with up to 3 chunks running concurrently by default.
+- **LLM analysis:** audio is not sent to the LLM; transcript text and voice scores are analyzed in five-minute windows. A 60-minute call typically needs about 12 tone-analysis calls and 12 action-item calls, plus speaker assessment.
+- **Recovery:** jobs store stage checkpoints and refresh a heartbeat every 10 seconds; stale jobs are reclaimed after 60 seconds. Emotion scoring restarts from the stage checkpoint, so completed chunks may be recomputed.
+- **Limits to keep in mind:** the emotion model runs on CPU, so total processing time depends on the host and audio. Speaker-role accuracy has not yet been measured against labeled real calls.
 
 ### Future improvements
 
-1. Move job execution to a durable queue (for example Cloud Tasks plus a worker) so provider work survives process/container shutdown independently of the API process.
-2. Persist emotion chunk completion/results incrementally so a retry can resume at the first unfinished chunk instead of repeating the entire emotion stage.
-3. Validate representative-speaker selection against labeled real calls; consider a reviewer-friendly confidence explanation and retain the manual override.
-4. Run repeat end-to-end one-hour tests while collecting stage-level timing, memory, database pool/transaction metrics, transcription quality, and rep-selection accuracy.
-5. Tune emotion concurrency from measured CPU/memory and latency; current default 3 is configurable and should be reduced for constrained machines.
+- Use a durable task queue so work survives backend/container restarts without relying on in-process workers.
+- Save emotion results per chunk to resume at the first unfinished chunk instead of repeating the full stage.
+- Evaluate speaker selection and one-hour latency/accuracy on labeled real calls; tune concurrency from measured CPU and memory.
 
 The standalone POC normalizes audio to mono 16 kHz Opus, places approximately five-minute cuts at detected silence midpoints (±30 seconds, hard-cut fallback), processes chunks with concurrency three, shifts word timestamps, and reports process RSS. It uses an offline mock downstream worker by default, so running it makes no API calls.
 
