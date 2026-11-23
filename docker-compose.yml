@@ -5,6 +5,7 @@ services:
     environment:
       PORT: "8080"
       EMOTION_SERVICE_TOKEN: ${EMOTION_SERVICE_TOKEN:?Set EMOTION_SERVICE_TOKEN in .env.docker}
+      EMOTION_INFERENCE_CONCURRENCY: ${EMOTION_INFERENCE_CONCURRENCY:-3}
     expose:
       - "8080"
     restart: unless-stopped
@@ -31,6 +32,7 @@ services:
       GLM_API_KEY: ${GLM_API_KEY:?Set GLM_API_KEY in .env.docker}
       EMOTION_SERVICE_URL: http://emotion-service:8080
       EMOTION_SERVICE_TOKEN: ${EMOTION_SERVICE_TOKEN:?Set EMOTION_SERVICE_TOKEN in .env.docker}
+      EMOTION_CONCURRENCY: ${EMOTION_CONCURRENCY:-3}
       CORS_ORIGIN: ${CORS_ORIGIN:?Set CORS_ORIGIN in .env.docker}
       UPLOAD_DIR: /app/uploads
     depends_on:

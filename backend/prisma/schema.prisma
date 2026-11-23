@@ -24,6 +24,10 @@ model Job {
   promptVersion      String?
   chunkTotal         Int       @default(0)
   chunkDone          Int       @default(0)
+  // Lease fields: an active worker refreshes heartbeatAt; a stale lease can
+  // be taken over by another worker on startup. Null = no active worker.
+  workerId           String?
+  heartbeatAt        DateTime?
   analysisSettings   Json?
   transcript         String?   // full transcript text from Scribe
   speakerTranscripts Json?     // { "speaker_0": "text...", "speaker_1": "text..." }

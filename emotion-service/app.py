@@ -33,10 +33,15 @@ if shutil.which("ffmpeg") is None:
 # Load the model once at startup, not per request.
 from funasr import AutoModel  # noqa: E402  (imported after the ffmpeg check on purpose)
 
+# Allow several inferences at once, bounded so a burst of parallel chunk
+# requests cannot overwhelm the shared model. Keep this in sync with the
+# backend's EMOTION_CONCURRENCY (which defaults to the same value).
+INFERENCE_CONCURRENCY = int(os.getenv("EMOTION_INFERENCE_CONCURRENCY", "3"))
+
 print(f"Loading {MODEL_ID} on CPU...", flush=True)
 model = AutoModel(model=MODEL_ID, hub="ms", device="cpu", disable_update=True)
-model_lock = threading.Lock()  # one inference at a time on the shared model
-print("Model loaded.", flush=True)
+model_semaphore = threading.BoundedSemaphore(INFERENCE_CONCURRENCY)
+print(f"Model loaded. Inference concurrency: {INFERENCE_CONCURRENCY}", flush=True)
 
 app = FastAPI(title="emotion-service")
 SERVICE_TOKEN = os.getenv("EMOTION_SERVICE_TOKEN", "")
@@ -62,7 +67,7 @@ def cut_segment(src: str, start: float, end: float, dst: str) -> None:
 
 def score_file(path: str) -> dict[str, float]:
     """Run emotion2vec on one file and return {label: score}."""
-    with model_lock:
+    with model_semaphore:
         result = model.generate(
             path, granularity="utterance", extract_embedding=False, disable_pbar=True
         )[0]

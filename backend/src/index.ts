@@ -9,7 +9,7 @@ import { z } from "zod";
 import { config } from "./config.js";
 import { prisma } from "./db.js";
 import { Prisma } from "./generated/prisma/client.js";
-import { runAnalysis, runPipeline, speakerTurns } from "./pipeline.js";
+import { claimStaleJob, isRecoverableJob, runAnalysis, runPipeline, speakerTurns } from "./pipeline.js";
 import { lintToneRules } from "./llm.js";
 import { publicRepCandidates } from "./speaker-role.js";
 import { audioDurationSec, isSupportedAudioFile } from "./audio.js";
@@ -214,6 +214,7 @@ app.patch("/jobs/:id/rep-speaker", async (req, res) => {
       analysisSettings: analysisSettings as Prisma.InputJsonValue,
       ...analysisProvenance(analysisSettings),
       stage: "scoring_tone",
+      checkpointStage: "scoring_tone",
       error: null,
     },
   });
@@ -244,20 +245,21 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 async function recoverInterruptedJobs() {
-  // In local development, tsx watch can restart the process while a background
-  // pipeline is running. Resume only jobs whose last durable checkpoint survived.
-  if (process.env.NODE_ENV === "production") return;
+  // Runs on startup and periodically in every environment. A job in an active
+  // stage with no live heartbeat was abandoned by a dead worker; reset it to
+  // its last committed checkpoint and resume it. updateMany makes the claim
+  // atomic so multiple backend instances cannot pick up the same job.
+  const cutoff = new Date(Date.now() - config.staleHeartbeatMs);
   const jobs = await prisma.job.findMany({
-    where: { stage: { in: ["uploaded", "transcribing", "scoring_tone", "analyzing"] } },
-    select: { id: true, stage: true, checkpointStage: true, updatedAt: true },
+    where: {
+      stage: { in: ["uploaded", "transcribing", "scoring_tone", "analyzing"] },
+      OR: [{ heartbeatAt: null }, { heartbeatAt: { lte: cutoff } }],
+    },
+    select: { id: true, stage: true, checkpointStage: true, heartbeatAt: true },
   });
   for (const job of jobs) {
-    if (!["uploaded", "transcribing", "scoring_tone", "analyzing"].includes(job.checkpointStage)) continue;
-    const claimed = await prisma.job.updateMany({
-      where: { id: job.id, stage: job.stage, updatedAt: job.updatedAt },
-      data: { stage: job.checkpointStage, error: null },
-    });
-    if (claimed.count === 0) continue;
+    if (!isRecoverableJob(job)) continue;
+    if (!(await claimStaleJob(job))) continue;
     console.warn(`[job ${job.id}] recovering interrupted pipeline from checkpoint ${job.checkpointStage}`);
     void runPipeline(job.id);
   }
@@ -265,7 +267,10 @@ async function recoverInterruptedJobs() {
 
 app.listen(config.port, () => {
   console.log(`Backend on http://localhost:${config.port}${config.mockExternal ? " (MOCK_EXTERNAL=true)" : ""}`);
-  void recoverInterruptedJobs().catch((error: unknown) => {
+  const sweep = () => void recoverInterruptedJobs().catch((error: unknown) => {
     console.error("Could not recover interrupted jobs:", error instanceof Error ? error.message : error);
   });
+  sweep();
+  const timer = setInterval(sweep, config.staleHeartbeatMs);
+  timer.unref();
 });

@@ -3,11 +3,23 @@ import "dotenv/config";
 const mockExternal = process.env.MOCK_EXTERNAL === "true";
 const scribeTimeoutMs = Number(process.env.SCRIBE_TIMEOUT_MS ?? 20 * 60 * 1000);
 const emotionTimeoutMs = Number(process.env.EMOTION_TIMEOUT_MS ?? 20 * 60 * 1000);
+const emotionConcurrency = Number(process.env.EMOTION_CONCURRENCY ?? 3);
+const heartbeatIntervalMs = Number(process.env.HEARTBEAT_INTERVAL_MS ?? 10_000);
+const staleHeartbeatMs = Number(process.env.STALE_HEARTBEAT_MS ?? 60_000);
 if (!Number.isFinite(scribeTimeoutMs) || scribeTimeoutMs < 1_000) {
   throw new Error("SCRIBE_TIMEOUT_MS must be a number of at least 1000 milliseconds.");
 }
 if (!Number.isFinite(emotionTimeoutMs) || emotionTimeoutMs < 1_000) {
   throw new Error("EMOTION_TIMEOUT_MS must be a number of at least 1000 milliseconds.");
+}
+if (!Number.isInteger(emotionConcurrency) || emotionConcurrency < 1 || emotionConcurrency > 8) {
+  throw new Error("EMOTION_CONCURRENCY must be an integer between 1 and 8.");
+}
+if (!Number.isFinite(heartbeatIntervalMs) || heartbeatIntervalMs < 1_000) {
+  throw new Error("HEARTBEAT_INTERVAL_MS must be a number of at least 1000 milliseconds.");
+}
+if (!Number.isFinite(staleHeartbeatMs) || staleHeartbeatMs < heartbeatIntervalMs * 2) {
+  throw new Error("STALE_HEARTBEAT_MS must be at least twice HEARTBEAT_INTERVAL_MS.");
 }
 
 // Fail at startup with the names (never the values) of any missing variables.
@@ -28,6 +40,9 @@ export const config = {
   externalTimeoutMs: Number(process.env.EXTERNAL_TIMEOUT_MS ?? 120_000),
   scribeTimeoutMs,
   emotionTimeoutMs,
+  emotionConcurrency,
+  heartbeatIntervalMs,
+  staleHeartbeatMs,
   injectScribeTimeout: process.env.INJECT_SCRIBE_TIMEOUT === "true",
   injectGlmInvalidJson: process.env.INJECT_GLM_INVALID_JSON === "true",
   emotionServiceUrl: process.env.EMOTION_SERVICE_URL ?? "http://127.0.0.1:8001",

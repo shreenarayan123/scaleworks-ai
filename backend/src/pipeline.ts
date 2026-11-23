@@ -4,6 +4,8 @@
  * checkpointStage records the last stage whose outputs were committed. A failed
  * job can therefore resume without repeating completed external work.
  */
+import { randomUUID } from "node:crypto";
+import { config } from "./config.js";
 import { prisma } from "./db.js";
 import type { Prisma } from "./generated/prisma/client.js";
 import { negativeEvidence, overallScores, scoreSegments, type ScoredSegment } from "./emotion.js";
@@ -69,6 +71,69 @@ async function safely(jobId: string, step: () => Promise<void>) {
   }
 }
 
+// Lease / heartbeat: a live worker refreshes heartbeatAt every
+// HEARTBEAT_INTERVAL_MS. A job left in an active stage with a stale (or null)
+// heartbeat is safe for another worker to reclaim on startup.
+const ACTIVE_STAGES: Stage[] = ["uploaded", "transcribing", "scoring_tone", "analyzing"];
+const workerId = randomUUID();
+
+export function isRecoverableJob(job: { stage: string; heartbeatAt: Date | null }, now = Date.now()) {
+  if (!ACTIVE_STAGES.includes(job.stage as Stage)) return false;
+  if (!job.heartbeatAt) return true;
+  return job.heartbeatAt.getTime() <= now - config.staleHeartbeatMs;
+}
+
+export async function claimStaleJob(job: { id: string; stage: string; checkpointStage: string }) {
+  const cutoff = new Date(Date.now() - config.staleHeartbeatMs);
+  const claimed = await prisma.job.updateMany({
+    where: {
+      id: job.id,
+      stage: job.stage,
+      OR: [{ heartbeatAt: null }, { heartbeatAt: { lte: cutoff } }],
+    },
+    data: { stage: job.checkpointStage, error: null, workerId: null, heartbeatAt: null },
+  });
+  return claimed.count === 1;
+}
+
+async function acquireLease(jobId: string) {
+  const now = new Date();
+  const staleBefore = new Date(now.getTime() - config.staleHeartbeatMs);
+  const claimed = await prisma.job.updateMany({
+    where: {
+      id: jobId,
+      OR: [{ workerId: null }, { heartbeatAt: null }, { heartbeatAt: { lte: staleBefore } }],
+    },
+    data: { workerId, heartbeatAt: now },
+  });
+  return claimed.count === 1;
+}
+
+async function releaseLease(jobId: string) {
+  await prisma.job
+    .updateMany({ where: { id: jobId, workerId }, data: { workerId: null, heartbeatAt: null } })
+    .catch(() => {});
+}
+
+async function withLease(jobId: string, task: () => Promise<void>) {
+  if (!(await acquireLease(jobId))) {
+    console.warn(`[job ${jobId}] skipped: another worker holds the lease`);
+    return;
+  }
+  const timer = setInterval(() => {
+    void prisma.job
+      .updateMany({ where: { id: jobId, workerId }, data: { heartbeatAt: new Date() } })
+      .catch(() => {});
+  }, config.heartbeatIntervalMs);
+  timer.unref?.();
+  try {
+    await safely(jobId, task);
+  } finally {
+    clearInterval(timer);
+    await releaseLease(jobId);
+  }
+}
+
 export function speakerTurns(words: TimedWord[]) {
   return mergeWords(words, Infinity).map((u) => ({ speaker: u.speaker, start: u.start, end: u.end, text: textOf(u.words) }));
 }
@@ -106,10 +171,13 @@ async function scoreToneStage(jobId: string): Promise<ScoredSegment[]> {
   await prisma.job.update({ where: { id: jobId }, data: { chunkTotal: chunks.length, chunkDone: 0 } });
   const scoredByChunk: ScoredSegment[][] = Array(chunks.length);
   let next = 0;
+  const concurrency = Math.min(config.emotionConcurrency, chunks.length);
+  console.info(`[emotion] starting ${JSON.stringify({ jobId, chunks: chunks.length, concurrency })}`);
   try {
-    // emotion2vec is one CPU model guarded by a lock in the service; parallel
-    // HTTP requests only queue behind that lock and can each hit their timeout.
-    await Promise.all(Array.from({ length: Math.min(1, chunks.length) }, async () => {
+    // The service permits several concurrent inferences (bounded by its own
+    // semaphore). Requests pick chunks from a shared queue, so a slow chunk
+    // does not hold up the other workers.
+    await Promise.all(Array.from({ length: concurrency }, async () => {
       while (true) {
         const index = next++;
         if (index >= chunks.length) return;
@@ -199,9 +267,9 @@ async function runFromCheckpoint(jobId: string, forceAnalysis = false) {
 }
 
 export function runPipeline(jobId: string) {
-  return safely(jobId, () => runFromCheckpoint(jobId));
+  return withLease(jobId, () => runFromCheckpoint(jobId));
 }
 
 export function runAnalysis(jobId: string) {
-  return safely(jobId, () => runFromCheckpoint(jobId, true));
+  return withLease(jobId, () => runFromCheckpoint(jobId, true));
 }
