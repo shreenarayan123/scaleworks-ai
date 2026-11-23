@@ -121,7 +121,7 @@ The uploader accepts WAV, MP3, M4A, MP4, OGG, and OPUS files up to 200 MB. Corru
 ### Sales-rep selection and custom rules
 
 - **Role decision:** Scribe diarizes the call; the role assessor scores each of the two speakers from the first five minutes, using conversational evidence, question count, and talk-time share. Scores below 0.70 or a top-two gap under 0.12 require reviewer confirmation.
-- **More speakers:** the current workflow supports two-speaker calls; robust multi-speaker role assignment and validation are future work. A reviewer can change the selected rep and rerun analysis without retranscription.
+- **More speakers:** the current workflow supports two-speaker calls; robust multi-speaker role assignment and validation are future work. 
 - **Rule setup checks:** custom rules are limited to 10 rules of 300 characters each; local checks catch short, imperative, or duplicate rules before an AI check for unclear, contradictory, or off-topic rules.
 - **Rule execution:** the LLM checks each custom rule against rep transcript windows and must return exact quoted evidence, a rule ID, and confidence. Code validates the output and applies the configured confidence threshold before producing findings.
 - **Built-in overlap:** a custom rule that overlaps a selected behavior shows a notice rather than blocking save; if the AI lint service is unavailable, saving continues with a notice.
