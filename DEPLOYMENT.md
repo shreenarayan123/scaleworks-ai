@@ -12,7 +12,7 @@ For a server where you can run Docker Compose, use the repository's `docker-comp
 4. Apply the database schema once with `docker compose --env-file .env.docker run --rm backend npx prisma migrate deploy --schema prisma/schema.prisma`.
 5. Route HTTPS traffic for the backend hostname to server port 8080 using a reverse proxy, and set Vercel's `VITE_API_URL` to that public HTTPS backend URL.
 
-The emotion service is only exposed on Compose's internal network. The recordings are kept in a named Docker volume. The Python model downloads on first start, so allow time and outbound internet access. If your friend specifically needs to pull prebuilt images instead of building from the repository, they will need an image registry; these Dockerfiles and Compose config build the images on the server.
+The emotion service is only exposed on Compose's internal network. The recordings are kept in a named Docker volume. Defaults accept audio up to one hour / 200 MB, send the full recording to Scribe once, then score long-call audio in five-minute emotion chunks with concurrency three. The Python model downloads on first start, so allow time and outbound internet access. If you need prebuilt images instead of building from the repository, configure an image registry.
 
 The Cloud Run definitions below are only for a GCP deployment.
 
@@ -32,7 +32,7 @@ The Cloud Run definitions below are only for a GCP deployment.
 6. In `backend/cloudrun.yaml`, replace the image region/project, `EMOTION_SERVICE_URL` with the emotion service URL, `YOUR_RECORDINGS_BUCKET`, and `YOUR_VERCEL_DOMAIN`. Deploy it with `gcloud run services replace backend/cloudrun.yaml --region REGION --project PROJECT_ID`. Keep unauthenticated access enabled for the browser API. Configure the bucket volume and Secret Manager permissions before starting the service.
 7. Apply Prisma migrations once from a trusted machine or CI environment with the production `DATABASE_URL` set: `npm ci --prefix backend`, then `npm run db:migrate --prefix backend`. The migration command uses Prisma's development migration workflow; for a production migration job, use `npx prisma migrate deploy --schema backend/prisma/schema.prisma` from the repository root after installing backend dependencies.
 
-The provided Cloud Run definitions use one request at a time per instance because the Python model is CPU-bound and the backend starts durable work in the request process. They set generous request timeouts for model loading and long recordings. Adjust instance limits and CPU/memory after measuring real workload and costs.
+The backend Cloud Run definition accepts one upload request per instance and returns `202` while the checkpointed pipeline runs in-process. The emotion service accepts three scoring requests per instance and limits model inference to three; it is capped at two instances by default. Adjust scale, CPU, and concurrency together after measuring workload and cost. A durable task queue is a better fit for high-volume or strict delivery guarantees.
 
 ## Vercel frontend
 
@@ -44,5 +44,6 @@ Import the repository into Vercel and set the project Root Directory to `fronten
 - The backend persists audio through a Cloud Storage FUSE mount. The service account needs bucket object read/write access. Keep the bucket in the same region where practical.
 - This project starts analysis work in-process after returning `202`. Active jobs hold a lease refreshed by a heartbeat (`HEARTBEAT_INTERVAL_MS`, default 10 s). The backend sweeps for jobs in active stages whose heartbeat is older than `STALE_HEARTBEAT_MS` (default 60 s) on startup and every stale interval, then resumes them from their last committed checkpoint. Claims are atomic, so several backend instances can share the database without double-processing. For stronger delivery guarantees, move job execution to Cloud Tasks or a queue worker before high-volume production use.
 - Emotion chunks are scored `EMOTION_CONCURRENCY` at a time (default 3). Keep this at or below the emotion service's `EMOTION_INFERENCE_CONCURRENCY` (also default 3) and size the service CPU accordingly; a single-core host should use `1` for both.
+- Docker Compose and Cloud Run definitions set the one-hour/200 MB upload limits, 20-minute per-request provider timeouts, and 10-second heartbeat / 60-second stale-job recovery defaults. Override them only when the host and upstream limits support the change.
 - There is no user authentication in the current app. A public backend URL allows anyone to upload and inspect calls. Add authentication and authorization before using this with sensitive or customer recordings.
 - Set `MAX_FILE_SIZE_BYTES`, `MAX_DURATION_SEC`, and `EXTERNAL_TIMEOUT_MS` on the backend as needed. Cloud Run request and memory limits also apply to 200 MB multipart uploads.

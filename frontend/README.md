@@ -13,6 +13,8 @@ npm run dev --prefix frontend
 
 The dev server prints its local URL. The backend must be running at `http://localhost:4000`; set `VITE_API_URL` in `frontend/.env` to use another backend URL.
 
+The uploader supports calls up to one hour and 200 MB by default. Long-call pages show transcription, speaker-confirmation, and emotion-chunk progress; users can confirm or change the selected sales-rep speaker.
+
 ## Useful commands
 
 ```powershell

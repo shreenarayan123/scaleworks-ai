@@ -9,7 +9,7 @@ spec:
         autoscaling.knative.dev/maxScale: "2"
         run.googleapis.com/execution-environment: gen2
     spec:
-      containerConcurrency: 1
+      containerConcurrency: 3
       timeoutSeconds: 900
       containers:
         - image: REGION-docker.pkg.dev/PROJECT_ID/callertone/emotion:latest
@@ -28,3 +28,5 @@ spec:
                 secretKeyRef:
                   key: latest
                   name: EMOTION_SERVICE_TOKEN
+            - name: EMOTION_INFERENCE_CONCURRENCY
+              value: "3"

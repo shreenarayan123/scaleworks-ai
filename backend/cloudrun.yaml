@@ -27,6 +27,20 @@ spec:
               value: /mnt/audio
             - name: EMOTION_SERVICE_URL
               value: https://EMOTION_SERVICE_URL
+            - name: MAX_DURATION_SEC
+              value: "3600"
+            - name: MAX_FILE_SIZE_BYTES
+              value: "209715200"
+            - name: SCRIBE_TIMEOUT_MS
+              value: "1200000"
+            - name: EMOTION_TIMEOUT_MS
+              value: "1200000"
+            - name: EMOTION_CONCURRENCY
+              value: "3"
+            - name: HEARTBEAT_INTERVAL_MS
+              value: "10000"
+            - name: STALE_HEARTBEAT_MS
+              value: "60000"
             - name: EMOTION_SERVICE_TOKEN
               valueFrom:
                 secretKeyRef:
