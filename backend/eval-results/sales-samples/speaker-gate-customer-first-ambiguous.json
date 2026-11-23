@@ -1,0 +1,69 @@
+{
+  "id": "speaker-gate-customer-first-ambiguous",
+  "purpose": "Exercise the needs_speaker_confirmation flow with a customer-first, intentionally role-ambiguous two-speaker clip that is longer than one minute.",
+  "expectedRoles": {
+    "firstVoice": "Customer",
+    "secondVoice": "Salesperson"
+  },
+  "voices": {
+    "customer": "CwhRBWXzGAHq8TQ4Fs17",
+    "salesperson": "EXAVITQu4vr4xnSDxMaL"
+  },
+  "modelId": "eleven_v3",
+  "durationSeconds": 132.68,
+  "dialogue": [
+    {
+      "speaker": "customer",
+      "text": "Thanks for joining. Our group works with teams on onboarding and integrations, and we have a few options we would like to compare. We can start with how your team handles a rollout."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "Thanks. We work with teams on onboarding and integrations too. There are a few ways to handle a rollout. What does your group usually look for when comparing options?"
+    },
+    {
+      "speaker": "customer",
+      "text": "We usually compare the implementation steps, support model, and ownership after launch. Our team can share the timeline we use if that would help."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "That would be useful. We can compare timelines and responsibilities side by side. Our team can also walk through the support options and send a short summary afterward."
+    },
+    {
+      "speaker": "customer",
+      "text": "Before we go further, could you tell us how your team handles handoffs between the first call and the technical review? We have seen both clear and confusing versions of that."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "We assign one owner who keeps the notes from the first call and carries them into the technical review. What has your group seen that made a handoff confusing?"
+    },
+    {
+      "speaker": "customer",
+      "text": "In a comparison we did last quarter, the notes were short and the second team asked for the same background again. We would rather send our own outline so nothing gets lost in the middle."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "Please do. We can work from your outline and add a checklist so both sides see the same requirements. Which parts of the rollout matter most to your group?"
+    },
+    {
+      "speaker": "customer",
+      "text": "The timing and the support window after launch. Our team has limited coverage in the evenings, so we need to know what happens if something comes up outside those hours."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "We can document the coverage window and the escalation path before any decision. Would it help if we put the options in writing so your group can review them at its own pace?"
+    },
+    {
+      "speaker": "customer",
+      "text": "Yes, that would help. Please include the implementation steps and who owns each one, because our internal review asks for that level of detail every time."
+    },
+    {
+      "speaker": "salesperson",
+      "text": "We will. We will send one short document with the steps, the owners, and the support details, and then we can answer any questions your team has on the next call."
+    }
+  ],
+  "files": {
+    "mp3": "D:\\D-assignments\\emotion2vec\\backend\\eval-results\\sales-samples\\speaker-gate-customer-first-ambiguous.mp3",
+    "wav": "D:\\D-assignments\\emotion2vec\\backend\\eval-results\\sales-samples\\speaker-gate-customer-first-ambiguous.wav"
+  },
+  "note": "The confidence gate is model-driven. Upload the WAV and confirm that the call reaches Needs confirmation, or that the first voice is identified as the customer. A model update or different voice choice can change that outcome."
+}

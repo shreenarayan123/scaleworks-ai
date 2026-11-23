@@ -1,0 +1,1438 @@
+{
+  "generatedAt": "2026-11-23T03:20:30.120Z",
+  "model": "glm-5.3-flash-uncensored",
+  "thresholds": {
+    "minLikelihood": 0.7,
+    "minGap": 0.12
+  },
+  "counts": {
+    "scenarios": 41,
+    "scored": 39,
+    "silentWrong": 3,
+    "caughtByGate": 4,
+    "gateFired": 18,
+    "errors": 0
+  },
+  "accuracy": {
+    "base": 0.8,
+    "swapped": 0.7333333333333333,
+    "adversarial": 1,
+    "customerFirstMultiSpeaker": 1,
+    "overall": 0.8205128205128205
+  },
+  "ambiguousGateCheck": [
+    {
+      "id": "adv-both-salesy",
+      "gate": true,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.66,
+          "reasons": [
+            "Opens and hosts the call ('Thanks for joining'), typical of the rep who scheduled it",
+            "Leads with a product pitch: 'Our product team offers a shared pilot with your company'",
+            "Drives the sales structure: 'Let's start with our discovery questions and next steps' — discovery plus next-steps framing is a seller-led motion",
+            "References prepared discovery questions ('our discovery questions'), implying a planned sales cadence"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.34,
+          "reasons": [
+            "Uses a rep-style courtesy check ('Is this a good time...') and is the only speaker to ask a question",
+            "Offers to present their own pricing tiers, which is seller-like behavior",
+            "Claims agenda leadership ('our company can lead the agenda today') but then defers ('Agreed') once speaker_0 sets the structure",
+            "Mostly responsive acknowledgments ('Great', 'Agreed') rather than driving the call"
+          ]
+        }
+      ]
+    }
+  ],
+  "informational": [
+    {
+      "id": "adv-hinglish-sales",
+      "correct": true,
+      "gate": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.95,
+          "reasons": [
+            "Opens with 'Thank you for joining', a typical rep greeting",
+            "Sets the agenda: introduces the product first, then offers to take questions",
+            "Answers product/process questions (onboarding timeline) and commits to sending a checklist/follow-up material",
+            "Higher talk-time ratio (0.66) consistent with presenting, corroborating role-language cues"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Behaves as a buyer: states interest areas ('pricing aur onboarding dono jaanna hai') and asks about the vendor's support process",
+            "Asks evaluative questions rather than answering them",
+            "Lower talk-time ratio (0.34) consistent with a prospect listening and probing"
+          ]
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "id": "base-01",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.88,
+          "reasons": [
+            "Opens the call with a host-style greeting ('Thanks for joining today'), typical of the rep running the meeting",
+            "Leads the agenda by asking the status/discovery question 'How has the pilot been going?'",
+            "Slightly higher talk-time ratio (0.52) consistent with the party guiding the conversation"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.12,
+          "reasons": [
+            "Responds to the rep's question rather than asking one (0 questions asked)",
+            "Uses customer-side language reporting on product experience ('our CRM fields are not syncing')",
+            "Lower talk-time ratio (0.48) and reactive role in the exchange"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-02",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.62,
+          "reasons": [
+            "Proactively delivers a work product ('the export is ready') and commits to next-step follow-through, a pattern typical of an account owner updating a client",
+            "Drives the conversation by supplying the status information while the other party merely receives it",
+            "Holds the larger share of talk time (~65%), though volume alone is weak evidence"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.38,
+          "reasons": [
+            "Responds with a brief acknowledgment and thanks ('Perfect, thank you for the update'), which reads more like a customer receiving a deliverable than a rep leading a call",
+            "Asks no questions and sets no agenda, showing passive rather than consultative behavior",
+            "Contributes less talk time (~35%), consistent with the non-driving party in an update-style exchange"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-03",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.85,
+          "reasons": [
+            "Opens the call at 0.0s, consistent with the rep driving the conversation",
+            "Leads the agenda by proposing next steps ('can review it together') rather than merely responding",
+            "Higher talk-time ratio (0.63 vs 0.37), aligning with the party presenting/explaining"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.15,
+          "reasons": [
+            "Responds with appreciation ('That would help us a lot'), a typical customer acknowledgment of offered help",
+            "Does not introduce company/product or set an agenda",
+            "Lower talk-time ratio (0.37), consistent with the receiving party"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-04",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.72,
+          "reasons": [
+            "Dominates the exchange with 63% of talk time, consistent with an agent driving the call",
+            "Directs the conversation by asserting a diagnosis ('That is your problem') and referencing the setup guide, typical of a rep/support agent explaining product steps",
+            "No customer-side language; speaks to the other party rather than requesting assistance"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.28,
+          "reasons": [
+            "Says 'we followed every step and need help', which reads as a customer requesting assistance",
+            "Lower talk share (~37%) and purely reactive response to speaker_0's claims",
+            "Uses first-person-plural customer framing ('we'), suggesting they represent the account being helped"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-05",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.6,
+          "reasons": [
+            "Asserts control of the conversation ('Stop you there', 'I am talking now'), a floor-steering pattern more typical of the rep/agent managing the call",
+            "Interrupts the other party mid-explanation, consistent with someone leading or redirecting the discussion",
+            "No explicit rep markers (no greeting, company/product intro, agenda, or discovery questions), so confidence stays moderate"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.35,
+          "reasons": [
+            "'I was only explaining the issue' reads like the party describing a problem, which leans customer-side rather than rep-side",
+            "Responds defensively after being cut off, suggesting a non-controlling role in the exchange",
+            "Zero questions asked and near-equal talk time provide no differentiating signal"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-06",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.55,
+          "reasons": [
+            "Single neutral, evaluative line ('That response is not helpful') could fit a rep pushing back on tone or steering the conversation, while speaker_0's lines lean clearly customer-side",
+            "Still weak evidence overall: no questions asked, no intro or agenda language, so this is a low-confidence inference rather than a clear rep identification"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.35,
+          "reasons": [
+            "Both lines are frustrated, dismissive customer-style venting ('This is a damn waste of time', 'Fix it yourself'), which rarely comes from a rep",
+            "Holds the larger talk share (~0.67), but talk volume alone is not a rep signal and there are no supporting markers: no greeting, company/product intro, agenda-setting, or discovery questions"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": false,
+      "gate": true,
+      "silentWrong": false,
+      "caught": true
+    },
+    {
+      "id": "base-07",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.68,
+          "reasons": [
+            "Directive, agenda-controlling language ('Read the documentation') fits the vendor-side role of steering the customer to self-serve resources",
+            "Higher talk-time share (~65%), consistent with the party explaining or deflecting on product matters",
+            "Dismissiveness toward 'basic questions' implies speaker_0 is the one expected to field product questions, i.e., the vendor/rep"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.32,
+          "reasons": [
+            "'We need a little more guidance' reads as a buyer/prospect requesting help, typical customer phrasing including the plural 'we' for a buying team",
+            "Lower talk-time share and reactive posture suggest the non-vendor participant",
+            "No discovery questions or introductions from speaker_1, weakening the rep hypothesis"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-08",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.75,
+          "reasons": [
+            "Offers to lead the session ('happy to walk through the fix with you'), typical of a rep/support agent driving the agenda",
+            "Holds larger share of talk time (0.67), consistent with the party explaining or presenting"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.25,
+          "reasons": [
+            "Responds with acceptance and gratitude ('Thank you, that sounds good'), characteristic of a customer agreeing to a proposed next step",
+            "Shorter turn and no agenda-setting language suggest the non-rep role"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-09",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.8,
+          "reasons": [
+            "Uses classic agent/service phrasing: 'I can absolutely help you resolve this today' implies they are the party providing assistance",
+            "Higher talk-time ratio (0.62) is consistent with a rep driving the interaction, though not decisive on its own",
+            "No customer-style language; the statement responds to a need rather than raising one"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.2,
+          "reasons": [
+            "Brief acknowledgment ('Okay, let us do that') reads like a customer agreeing to a proposed resolution",
+            "Lower talk-time ratio (0.38) fits a customer deferring to the agent",
+            "No assisting, introducing, or agenda-setting language typical of a rep"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-10",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.68,
+          "reasons": [
+            "Delivers a service-recovery apology ('I am sorry this has been frustrating for your team'), a pattern typical of the vendor/rep side acknowledging a customer's pain",
+            "Frames the counterpart's group as the affected party ('your team'), implying speaker_0 represents the providing company",
+            "Longer talk share (~72%) weakly supports the party driving the exchange, though no discovery questions or agenda-setting language is present"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.32,
+          "reasons": [
+            "Responds as part of a group ('We appreciate the apology'), consistent with a customer stakeholder speaking for their team",
+            "Accepts an apology rather than offering one, which fits the recipient of service recovery rather than the rep",
+            "Shorter turn (~28% talk time) with no questions, intros, or next-step proposals typical of a rep-led call"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-11",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.75,
+          "reasons": [
+            "'We need a constructive plan' shows de-escalation and forward-steering typical of a rep managing a difficult call",
+            "Attempts to redirect the conversation toward next steps, consistent with agenda leadership",
+            "Weak positive signal only; no explicit rep markers like greetings, company intro, or questions appear in this short excerpt"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.25,
+          "reasons": [
+            "Utterances ('Stop wasting my time', 'This is your fault') read as frustrated, accusatory customer language rather than rep behavior",
+            "Higher talk-time ratio (0.61) but no rep-typical content such as introductions, agenda-setting, or discovery questions"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": false,
+      "gate": false,
+      "silentWrong": true,
+      "caught": false
+    },
+    {
+      "id": "base-12",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.55,
+          "reasons": [
+            "Only speaker to produce a question, though it is a rhetorical tag ('...right?') rather than a discovery question",
+            "Initiates the exchange and drives the conversational turn, a mild rep-like pattern",
+            "No company/product introduction, agenda-setting, or availability check present, keeping confidence low"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.45,
+          "reasons": [
+            "Reactive one-line response ('That sounds sarcastic') with no questions or agenda control",
+            "Could plausibly be a rep acknowledging a customer's frustration, but offers no identifying rep language",
+            "Shorter talk time alone is not disqualifying given the ambiguous, informal content"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-13",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.45,
+          "reasons": [
+            "No company/product introduction, agenda setting, or discovery questions in the excerpt",
+            "Only utterance is a delivery commitment ('send the permissions checklist by Friday'), which fits either role",
+            "Slightly higher talk-time ratio (0.53) but question count is 0, so volume is weak evidence"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.4,
+          "reasons": [
+            "No greeting phrases like 'thanks for calling' or 'is this a good time?'",
+            "Utterance is also a delivery commitment ('send the sync logs today') with no rep-typical behaviors",
+            "Lower talk-time ratio (0.47) and zero questions provide no positive rep signal"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "base-14",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.65,
+          "reasons": [
+            "Deferential commitment ('Understood, we will prioritize it') matches how a vendor/rep acknowledges a client's urgent request",
+            "Short, accommodating response is consistent with a service provider absorbing pressure from the other side",
+            "Weak overall signal: no greeting, product/company mention, or questions, so this remains a low-confidence inference"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.35,
+          "reasons": [
+            "Issues an urgent demand ('solve this immediately') which reads more like a customer or manager escalating than a rep",
+            "No rep-typical behavior: no introduction, agenda setting, or discovery questions (questionCount: 0)",
+            "Higher talk time (67%) suggests driving the conversation, but commanding tone points away from a sales role"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": false,
+      "gate": true,
+      "silentWrong": false,
+      "caught": true
+    },
+    {
+      "id": "base-15",
+      "notes": "Labeled eval dialogue: speaker_0 is the rep.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.62,
+          "reasons": [
+            "Proactively offers assistance ('I can help review the issue'), typical of a rep owning the call",
+            "Proposes next steps ('find a path forward'), showing agenda leadership",
+            "Higher talk-time ratio (0.65) is consistent with, though not proof of, the rep role"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.44,
+          "reasons": [
+            "'Thank you for staying with us' uses company-side phrasing ('us'), suggesting a company representative, possibly retention/account management",
+            "Utterance is a brief courtesy acknowledgment with no discovery questions or agenda setting",
+            "Lower talk-time ratio (0.35) and no guiding language weaken the rep case relative to speaker_0"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-01",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.9,
+          "reasons": [
+            "Opens the call with 'Thanks for joining today', typical of the meeting host/rep convening the call",
+            "Leads the agenda by asking the discovery-style check-in 'How has the pilot been going?'",
+            "Only speaker who asks a question (1 vs 0) and holds slightly more talk time"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.1,
+          "reasons": [
+            "Answers the status question rather than asking one, consistent with the customer role",
+            "Refers to 'our CRM fields', describing their own product environment/experience during the pilot"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-02",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.62,
+          "reasons": [
+            "Delivers a work commitment ('export is ready, I will send it this afternoon'), matching the rep role of promising a deliverable/follow-up to a customer",
+            "Holds the majority of talk time (~65%), consistent with the party providing the substantive update"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.38,
+          "reasons": [
+            "Responds with a brief acknowledgment and thanks ('Perfect, thank you for the update'), typical of the customer/prospect receiving an update rather than driving the call",
+            "Lower talk time (~35%) and no agenda-setting or discovery behavior"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-03",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.85,
+          "reasons": [
+            "Opens the call at 0.0s, setting the agenda ('We found a configuration issue and can review it together')",
+            "Uses vendor-side framing 'We found', implying their team performed the diagnostic work",
+            "Holds majority talk time (~63%), consistent with the party driving the conversation"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.15,
+          "reasons": [
+            "Responds with gratitude ('That would help us a lot'), typical of a customer accepting offered help",
+            "Says 'us', indicating they represent the recipient side rather than the service provider",
+            "Speaks second and briefly (~37% talk time), following the other party's lead"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-04",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.65,
+          "reasons": [
+            "Leads the exchange by delivering a diagnosis ('That is your problem'), a pattern typical of a support/sales agent explaining root cause",
+            "Addresses the other party as 'you' regarding setup-guide compliance, consistent with vendor-side troubleshooting directed at a customer",
+            "Higher talk-time ratio (~0.63) supports the agent role, though volume alone is not conclusive"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.35,
+          "reasons": [
+            "Says 'we ... need help', phrasing characteristic of a customer requesting assistance rather than a rep",
+            "Responds defensively to blame ('We followed every step'), fitting the customer side of a support interaction",
+            "Lower talk-time ratio (~0.37); no rep-typical signals such as greetings, intros, or discovery questions"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-05",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.6,
+          "reasons": [
+            "Asserts control of the conversation flow ('Stop you there', 'I am talking now'), which is consistent with an agent steering/managing the call",
+            "No greeting, product introduction, or discovery questions present, so confidence is limited",
+            "Slightly higher talk-time share, though volume alone is not diagnostic"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.4,
+          "reasons": [
+            "Phrase 'I was only explaining the issue' reads more like a customer describing a problem than a rep pitching a product or leading an agenda",
+            "Was the interrupted party, which can fit either role but pairs naturally with a customer being cut off mid-explanation",
+            "Zero questions asked and near-even talk time provide no distinguishing signal"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-06",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.55,
+          "reasons": [
+            "Opens the exchange and holds the larger share of talk time (~67%), a weak but positive rep signal",
+            "Drives the interaction with directives ('Fix it yourself'), consistent with an agent managing (here, poorly) the conversation",
+            "No introduction, agenda-setting, or discovery questions, so confidence stays near a coin flip"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.45,
+          "reasons": [
+            "Single evaluative remark ('That response is not helpful') reads more like a customer judging service quality than a rep line",
+            "Lower talk time (~33%) and zero questions offer no affirmative rep indicators",
+            "Could still be a rep acknowledging pushback, hence likelihood remains close to even"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-07",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.7,
+          "reasons": [
+            "Directs the other party to 'read the documentation', a vendor-side move pointing a customer to product materials",
+            "Controls the exchange with imperative, agenda-setting language and holds the larger talk share (~65%)",
+            "Frames the interaction around handling 'basic questions', consistent with the party expected to field product inquiries"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.3,
+          "reasons": [
+            "Requests help ('We need a little more guidance'), a buyer-style plea rather than rep-led discovery or agenda setting",
+            "Plural 'we' suggests speaking for a customer team evaluating or adopting a product",
+            "Lower talk time and no introductions, questioning, or call-framing behavior typical of a representative"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-08",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.75,
+          "reasons": [
+            "Offers to lead the session ('happy to walk through the fix with you'), indicating agenda leadership typical of a rep",
+            "Higher talk-time ratio (0.67) consistent with the party presenting/explaining"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.25,
+          "reasons": [
+            "Responds with acceptance and gratitude ('Thank you, that sounds good'), a customer-style acknowledgment",
+            "Lower talk-time ratio (0.33) and no agenda-setting language"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-09",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.82,
+          "reasons": [
+            "Opens the call with agent-style reassurance ('I can absolutely help you resolve this today!'), typical of a rep taking ownership",
+            "Higher talk-time ratio (0.62) consistent with the party driving the interaction",
+            "Speaks first, which often indicates the representative greeting or setting direction"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.18,
+          "reasons": [
+            "Responds with brief agreement ('Okay, let us do that'), characteristic of a customer accepting an offer of help",
+            "Lower talk-time ratio (0.38)",
+            "No introduction, agenda-setting, or discovery language present"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-10",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.75,
+          "reasons": [
+            "Opens with a proactive empathy/apology statement ('I am sorry this has been frustrating for your team'), a hallmark of vendor/account-rep language taking ownership of service issues",
+            "Addresses the other party as 'your team', implying speaker_1 represents the providing side apologizing to the client organization",
+            "Higher talk-time ratio (~72%) is consistent with a rep driving the interaction, though used only as weak corroboration"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.25,
+          "reasons": [
+            "Responds as the recipient of the apology ('We appreciate the apology'), which fits a customer acknowledging a vendor's accountability",
+            "Lower talk-time ratio (~28%) and no questions offer no positive rep signals",
+            "Alternative reading exists where a customer apologizes for their own team's delays, but this is less typical than a vendor apologizing for product/service frustration"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-11",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.72,
+          "reasons": [
+            "Proposes 'a constructive plan', showing agenda-setting and de-escalation behavior typical of a rep managing a tense call",
+            "Attempts to redirect the conversation toward next steps rather than assigning blame",
+            "Lower talk time is consistent with a rep listening to a venting customer"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.28,
+          "reasons": [
+            "Accusatory, complaint-style language ('Stop wasting my time', 'This is your fault') reads like a frustrated customer or prospect",
+            "Blames the other party, which fits a dissatisfied client rather than someone selling",
+            "Higher talk time alone is weak evidence since they ask no questions and show no discovery or introduction behavior"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": false,
+      "gate": false,
+      "silentWrong": true,
+      "caught": false
+    },
+    {
+      "id": "swapped-12",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.62,
+          "reasons": [
+            "Calm, neutral reply ('That sounds sarcastic.') fits an agent acknowledging and de-escalating a customer's tone",
+            "Speaker_1's sarcasm about 'reading the guide' implies the other party had previously recommended documentation or self-service help, a typical rep/support move",
+            "Shows no venting or frustration, consistent with a service/sales posture"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.38,
+          "reasons": [
+            "Sarcastic complaint about being directed to a guide reads as customer/prospect frustration rather than rep behavior",
+            "The single question is rhetorical ('...right?'), not a discovery, qualification, or agenda-setting question, so the questionCount signal is weak",
+            "Higher talk time alone is insufficient evidence; no greeting, company/product introduction, or next-step language appears"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": false,
+      "gate": true,
+      "silentWrong": false,
+      "caught": true
+    },
+    {
+      "id": "swapped-13",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.56,
+          "reasons": [
+            "Opens the exchange at 0.0s, weakly suggesting initiative/agenda-setting",
+            "Commits to delivering a 'permissions checklist by Friday', i.e., owns a follow-up deliverable with a deadline, a pattern common for reps managing next steps",
+            "Slightly higher talk-time ratio (0.53) though this alone is weak evidence",
+            "No explicit rep markers present (no intro, discovery questions, or greeting); confidence is low"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.44,
+          "reasons": [
+            "Responds rather than initiates, consistent with a client/prospect acknowledging next steps",
+            "Uses 'we will send', which can indicate a team-side (vendor) commitment but is equally typical of a customer fulfilling a request",
+            "No discovery questions, product/company introduction, or greeting cues that would mark a sales rep",
+            "Marginally lower talk-time ratio (0.47), which is not decisive on its own"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "swapped-14",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.65,
+          "reasons": [
+            "Responsive, service-oriented phrasing ('Understood, we will prioritize it') typical of a rep/account manager committing to a client request",
+            "Accommodating tone accepting the other party's urgency rather than setting demands",
+            "No discovery questions or introduction cues, so confidence is limited"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.35,
+          "reasons": [
+            "Imperative, urgent directive ('We need to solve this immediately...') reads more like a customer/stakeholder pressuring a vendor",
+            "Drives the agenda by demanding immediate action, which reps less commonly do when fielding escalations",
+            "Higher talk time here reflects demanding language, not necessarily a rep role"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": false,
+      "gate": true,
+      "silentWrong": false,
+      "caught": true
+    },
+    {
+      "id": "swapped-15",
+      "notes": "Same dialogue with IDs swapped: rep is speaker_1.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.75,
+          "reasons": [
+            "Says 'Thank you for staying with us,' a company-side retention phrase implying the listener is the customer who stayed with the speaker's company",
+            "Matches the 'thanks for calling'-style gratitude pattern typical of sales/retention representatives closing an interaction"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.5,
+          "reasons": [
+            "Line 'I can help review the issue and find a path forward' is assistive, agent-style language, but reads more like support triage than sales discovery",
+            "Holds more talk time (~0.65) yet asks no questions; per guidance, talk volume alone is weak evidence of the rep role"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": false,
+      "gate": false,
+      "silentWrong": true,
+      "caught": false
+    },
+    {
+      "id": "adv-quiet-rep",
+      "notes": "Rep gives one-word answers; customer monologues.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.6,
+          "reasons": [
+            "Vendor-side role implied by 'I can check that,' offering to investigate the customer's platform issue",
+            "Brief acknowledgments ('Okay', 'Sure') show them receiving and accepting the customer's demands, typical of an account owner on the vendor side",
+            "No introduction, discovery questions, or agenda-setting, and the tone reads more like support/CSM than sales, so confidence is only moderate"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.15,
+          "reasons": [
+            "Speaks as the customer: 'we have been on the platform for about eight months' and 'our nightly imports fail' describe their own deployment",
+            "Complains about the vendor's process: 'We have raised this three times with support'",
+            "Sets requirements for the vendor: 'What we need is someone who owns this end to end,' which is a buyer's demand, not rep behavior"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-customer-leads",
+      "notes": "Customer asks discovery-style questions; rep answers with product detail.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.95,
+          "reasons": [
+            "Answers every question with vendor-perspective language: 'Our onboarding includes...', 'Our platform maps custom fields...', 'You get a named success manager'",
+            "Describes concrete product capabilities, implementation timeline ('live in three weeks'), and support offerings typical of a sales rep handling objections/discovery",
+            "Holds slightly more talk time (0.58 vs 0.42) while delivering explanatory responses, matching the rep role despite asking zero questions"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Asks three consecutive evaluation questions about onboarding, custom fields, and post-go-live support, consistent with a prospect vetting a vendor",
+            "Uses buyer framing such as 'Before we talk pricing' and 'how does your product handle...' rather than pitching anything",
+            "Provides no product descriptions or company introductions"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-no-sales-cues",
+      "notes": "Rep never introduces the company or leads; purely reactive.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.8,
+          "reasons": [
+            "Says 'Let me look,' implying access to the vendor's account/billing system, typical of the company-side rep",
+            "Responses ('Okay', 'I see') are brief acknowledgments while receiving a complaint, consistent with a rep handling an inbound issue",
+            "Customer's grievances (double charge, missing credit, renewal quote) are directed at them, fitting the vendor role"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.2,
+          "reasons": [
+            "Uses customer-framed language: 'We were charged twice,' 'the credit never appeared,' 'renewal quote came in higher than we agreed'",
+            "Initiates the contact to raise billing disputes, characteristic of a customer escalating to their account contact",
+            "Dominates talk time (84%), but content is grievance explanation rather than discovery, pitching, or agenda-setting typical of a rep"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-both-salesy",
+      "notes": "Two vendor reps comparing notes; both use sales language. Gate should fire.",
+      "expectedRep": null,
+      "ambiguous": true,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.66,
+          "reasons": [
+            "Opens and hosts the call ('Thanks for joining'), typical of the rep who scheduled it",
+            "Leads with a product pitch: 'Our product team offers a shared pilot with your company'",
+            "Drives the sales structure: 'Let's start with our discovery questions and next steps' — discovery plus next-steps framing is a seller-led motion",
+            "References prepared discovery questions ('our discovery questions'), implying a planned sales cadence"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.34,
+          "reasons": [
+            "Uses a rep-style courtesy check ('Is this a good time...') and is the only speaker to ask a question",
+            "Offers to present their own pricing tiers, which is seller-like behavior",
+            "Claims agenda leadership ('our company can lead the agenda today') but then defers ('Agreed') once speaker_0 sets the structure",
+            "Mostly responsive acknowledgments ('Great', 'Agreed') rather than driving the call"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": null,
+      "gate": true,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-three-speakers",
+      "notes": "Rep, customer, and a manager who says one line.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.93,
+          "reasons": [
+            "Opens the call with 'Thanks for joining', typical host/rep greeting",
+            "States they run the pilot for their product team, indicating vendor-side ownership",
+            "Sets the agenda: 'I will walk through the setup and next steps'",
+            "Welcomes another participant ('Happy to have you'), reinforcing host role",
+            "Highest talk-time ratio (~0.59), consistent with leading the call"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.12,
+          "reasons": [
+            "Describes owning the CRM integration 'on our side', phrasing typical of a customer-side stakeholder",
+            "Low talk-time share (~0.22) and no agenda-setting or hosting language"
+          ]
+        },
+        {
+          "speaker": "speaker_2",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Explicitly self-identifies as 'the director here, just listening in', an observer rather than presenter",
+            "Lowest talk-time ratio (~0.20) with no hosting, intro, or agenda behavior"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-customer-first-three-speakers",
+      "notes": "Customer opens, then the rep joins a call with a customer-side manager; three speakers total.",
+      "expectedRep": "speaker_2",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_2",
+          "repLikelihood": 0.96,
+          "reasons": [
+            "Explicitly self-identifies: 'I am your account representative'",
+            "Owns resolution and next steps: will review the signed order form and invoice with the billing team and deliver an itemized explanation by Thursday",
+            "Uses vendor-side acknowledgment and commitment phrasing ('Thanks for laying that out', 'Absolutely, I will include both items and copy you')"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.08,
+          "reasons": [
+            "Opens the dispute from the buyer side ('the new platform fee was not in our original agreement'), referencing their own contract",
+            "Requests explanation and written breakdown of charges, acting as the complaining customer rather than the service provider",
+            "Adds scope to the request ('include the usage charges too'), consistent with a customer escalating billing concerns"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.04,
+          "reasons": [
+            "Explicitly states 'I manage the account internally,' indicating a customer-side internal role",
+            "Focuses on internal budget approval and keeping the finance team updated, typical of a client stakeholder, not a vendor rep",
+            "No agenda-setting, commitments, or service language directed at others"
+          ]
+        }
+      ],
+      "top1": "speaker_2",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-customer-first-four-speakers-late-rep",
+      "notes": "Customer opens, two customer-side colleagues speak, and the rep joins fourth; four speakers total.",
+      "expectedRep": "speaker_3",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_3",
+          "repLikelihood": 0.95,
+          "reasons": [
+            "Explicitly self-identifies: 'I am the account representative'",
+            "Takes vendor-side ownership by committing to coordinate engineering and support and deliver an owner plus recovery timeline",
+            "Highest talk-time share, consistent with the party accountable for the relationship and resolution"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.15,
+          "reasons": [
+            "Opens the meeting ('Thanks for joining') and sets the agenda, which can look host-like",
+            "Frames renewal as leverage ('recovery plan before discussing renewal') and issues requirements about covering missed records, consistent with a customer-side lead rather than the vendor",
+            "No product/company introduction or selling language"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Self-describes as running operations and performing manual record reconciliation, indicating a customer-side operational stakeholder"
+          ]
+        },
+        {
+          "speaker": "speaker_2",
+          "repLikelihood": 0.04,
+          "reasons": [
+            "Self-identifies as IT reviewing connector logs and authentication failures, a customer-side technical diagnostic role"
+          ]
+        }
+      ],
+      "top1": "speaker_3",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-customer-first-three-speakers-rep-second",
+      "notes": "Customer speaks first; rep is speaker_1 and a customer-side director enters later; three speakers total.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.96,
+          "reasons": [
+            "Introduces themselves as the vendor-side owner: 'I lead onboarding for our team'",
+            "Describes the delivery/onboarding process (data and permissions review, two training sessions)",
+            "Makes seller-style commitments: will send a project plan with owners and dates and include a migration checkpoint",
+            "Handles the buyer's risk question about missing data fields with a remediation workflow",
+            "Highest talk-time ratio (0.59), consistent with leading the discussion, though the role framing is the stronger signal"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Behaves as a prospective buyer: asks what their team needs to prepare 'before we sign'",
+            "Closes by requesting the plan 'so we can review it internally', typical customer-side language",
+            "No vendor-style process descriptions or commitments made"
+          ]
+        },
+        {
+          "speaker": "speaker_2",
+          "repLikelihood": 0.04,
+          "reasons": [
+            "Self-identifies as the customer-side decision maker: 'I am the director approving the purchase'",
+            "Asks a risk/objection question about data migration gaps, typical buyer diligence",
+            "Only one question and lowest talk-time ratio; no vendor process or commitment language"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-rep-joins-late",
+      "notes": "First ~4 minutes are IVR and a customer monologue; rep enters near the 5-minute cutoff.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.88,
+          "reasons": [
+            "Introduces themselves as 'the sales team,' a classic rep-style company/product introduction",
+            "Takes ownership of the interaction ('I have your account open and I can own this from here'), typical of the agent picking up the call",
+            "Speaks after the customer finishes their setup, consistent with a live agent answering rather than an automated prompt"
+          ]
+        },
+        {
+          "speaker": "speaker_2",
+          "repLikelihood": 0.12,
+          "reasons": [
+            "Opens with 'Thank you for calling,' which can indicate a rep, but immediately follows with an IVR-style menu ('Press one for sales, two for support, or stay on the line') suggesting an automated attendant or front desk, not the assigned salesperson",
+            "Very low talk time (0.12) and no follow-up engagement with the customer's detailed complaint"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.04,
+          "reasons": [
+            "Dominates talk time (0.75) but uses it to describe their own problems, timeline, tickets, and escalation threat — behavior of a frustrated customer, not a rep",
+            "No introductions, agenda-setting, or discovery questions; explicitly narrating their situation 'before anyone picks up'"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-swapped-position",
+      "notes": "Clear sales-led dialogue with the rep as the second speaker.",
+      "expectedRep": "speaker_1",
+      "ambiguous": false,
+      "informational": false,
+      "ranked": [
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.97,
+          "reasons": [
+            "Uses the classic service/sales greeting 'Thanks for calling', indicating they received the inbound call",
+            "Immediately offers assistance ('I can help with that') and introduces the product/team handling the issue",
+            "Leads the call agenda ('I will walk you through the fix today', 'Let's start with your setup')",
+            "Commits to a follow-up deliverable ('I will send the checklist after this call'), typical rep behavior",
+            "Higher talk-time ratio (~0.76) supports, though does not alone establish, the rep role"
+          ]
+        },
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Opens the call by reporting a problem ('we have a problem with the sync'), typical of an inbound customer",
+            "Only briefly acknowledges the rep's plan ('That would be great') without leading the conversation",
+            "Lower talk-time ratio (~0.24) consistent with a customer role"
+          ]
+        }
+      ],
+      "top1": "speaker_1",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    },
+    {
+      "id": "adv-hinglish-sales",
+      "notes": "Informational: Hinglish sales call, common in the target market.",
+      "expectedRep": "speaker_0",
+      "ambiguous": false,
+      "informational": true,
+      "ranked": [
+        {
+          "speaker": "speaker_0",
+          "repLikelihood": 0.95,
+          "reasons": [
+            "Opens with 'Thank you for joining', a typical rep greeting",
+            "Sets the agenda: introduces the product first, then offers to take questions",
+            "Answers product/process questions (onboarding timeline) and commits to sending a checklist/follow-up material",
+            "Higher talk-time ratio (0.66) consistent with presenting, corroborating role-language cues"
+          ]
+        },
+        {
+          "speaker": "speaker_1",
+          "repLikelihood": 0.05,
+          "reasons": [
+            "Behaves as a buyer: states interest areas ('pricing aur onboarding dono jaanna hai') and asks about the vendor's support process",
+            "Asks evaluative questions rather than answering them",
+            "Lower talk-time ratio (0.34) consistent with a prospect listening and probing"
+          ]
+        }
+      ],
+      "top1": "speaker_0",
+      "correct": true,
+      "gate": false,
+      "silentWrong": false,
+      "caught": false
+    }
+  ]
+}
