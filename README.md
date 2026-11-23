@@ -106,3 +106,38 @@ npm run dev --prefix frontend
 ```
 
 The uploader accepts WAV, MP3, M4A, MP4, OGG, and OPUS files up to 200 MB. Corrupt files and files without an audio stream are rejected before analysis.
+
+## Long-call chunking POC
+
+The current project accepts calls up to one hour. ElevenLabs' batch Speech-to-Text API supports files up to 5 GB and durations up to 15 hours; calls over eight minutes are internally parallelized. Each call remains one Scribe request, preserving a single diarization namespace. Before upload, the backend creates a temporary mono 16 kHz Opus copy at 24 kbps (about 11 MB for an hour of speech); the original remains stored for playback and retries. Scribe uses `SCRIBE_TIMEOUT_MS` (20 minutes by default). Node 22.23.2 bundles Undici 6.28.0, whose default 300-second header and body timers are overridden for Scribe with a dedicated Agent set 30 seconds above that deadline. Structured `[scribe]` log events record job/request IDs, original and compressed sizes, duration, compression time, upload completion, response time, status, and classified failures. The optional `detect_speaker_roles` mode adds a 10% surcharge, so the project continues to diarize and assess the rep role itself. See the [Scribe API limits and parameters](https://elevenlabs.io/docs/api-reference/speech-to-text/convert) and [batch concurrency guidance](https://elevenlabs.io/docs/overview/capabilities/speech-to-text/).
+
+The standalone POC normalizes audio to mono 16 kHz Opus, places approximately five-minute cuts at detected silence midpoints (±30 seconds, hard-cut fallback), processes chunks with concurrency three, shifts word timestamps, and reports process RSS. It uses an offline mock downstream worker by default, so running it makes no API calls.
+
+Example test file from the labeled evaluation clips (43 repetitions produces about one hour). The backend already pins `tsx` at version 4.23.15, so the POC adds no dependency:
+
+```bash
+for i in $(seq 1 43); do
+  for f in backend/eval-results/clips/[0-9][0-9]-*.mp3; do
+    printf "file '%s'\n" "$PWD/$f"
+  done
+done > /tmp/callertone-list.txt
+ffmpeg -f concat -safe 0 -i /tmp/callertone-list.txt -ar 16000 -ac 1 -c:a libopus -b:a 24k /tmp/callertone-long.opus
+npx --prefix backend tsx backend/scripts/poc-chunking.ts /tmp/callertone-long.opus
+```
+
+Measured on the generated evaluation-clip file:
+
+| Audio length | Chunks | Wall time | Peak RSS | Stitched words | Timeline |
+|---:|---:|---:|---:|---:|---|
+| 29.6 min | 6 | 25.97 s | 47 MB | 6 (mock) | Monotonic |
+| 60.5 min | 13 | 51.38 s | 46 MB | 13 (mock) | Monotonic |
+
+The 60.5-minute internal cuts were at 292.58, 589.41, 883.94, 1180.77, 1475.30, 1772.13, 2066.66, 2363.49, 2658.02, 2954.85, 3249.38, and 3546.21 seconds. Each coincided with an FFmpeg silence midpoint detected in the normalized test file. Peak RSS remained 46–47 MB as duration doubled in these runs. The POC's mock worker emits one synthetic word per chunk; it verifies bounded scheduling and timestamp offsets, not ASR boundary accuracy. No live Scribe request was made, so this run does not validate real transcription or diarization output.
+
+A failed job's Retry action resumes from its last saved checkpoint. In local development, backend startup also resumes jobs left in an active stage after a server restart, using an atomic checkpoint claim; partial emotion chunks are recomputed because their scores are committed only when the full stage finishes. A failure during transcription resumes from `uploaded`, re-creates the compact Scribe copy, and re-sends the preserved original; a failure in a later analysis stage does not repeat transcription. Emotion2vec runs on CPU behind a single-model lock, so the backend scores one five-minute chunk at a time. `EMOTION_TIMEOUT_MS` defaults to 20 minutes per chunk, and the emotion service's Undici header/body timers are set 30 seconds higher. ElevenLabs also supports asynchronous Scribe webhooks, but enabling them requires a configured, publicly reachable HTTPS callback and webhook signature verification. This local backend has no such callback configured, so it uses the bounded synchronous request.
+
+The one-hour Scribe case has **not been re-run after these changes**: the last observed account balance was 209 credits while the one-hour request required 2,400. The 20-30-minute live validation also requires more credits than that last observed balance. Do not treat the offline chunking POC measurements above as live Scribe validation.
+
+The job pipeline uses one whole-call Scribe request, then creates silence-aligned emotion audio chunks for calls longer than 5.5 minutes. `chunkTotal` and `chunkDone` are stored on the job and shown during voice analysis. Tone findings and action-item extraction are processed in five-minute transcript windows and merged using absolute timestamps. Because Scribe sees the complete recording in one request, its speaker IDs do not reset at our emotion chunk boundaries. Memory scales with the bounded audio chunk working set and model service, rather than buffering the full recording in application memory; chunk files are temporary and removed after scoring.
+
+The current POC does not include a real-Scribe speaker-identity accuracy score. The generated clips are labeled, but validating role accuracy requires sending the full concatenated file through the billable transcription endpoint and comparing Scribe's diarization to those labels.
