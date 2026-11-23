@@ -22,6 +22,7 @@ describe('Backend job mapping', () => {
   expect(toCall({ ...base, stage: 'scoring_tone' })).toMatchObject({ status: 'processing', progressStep: 'Analyzing voice' });
   expect(toCall({ ...base, stage: 'done' }).status).toBe('ready');
   expect(toCall({ ...base, stage: 'failed' }).status).toBe('failed');
+  expect(toCall({ ...base, stage: 'needs_speaker_confirmation' }).status).toBe('needs_confirmation');
  });
  it('names speakers by order of first appearance and marks the rep', () => {
   const call = toCallDetail(job);
