@@ -77,5 +77,14 @@ export function mockToneVerdict(repLines: Line[], evidence: Evidence[], settings
       ? "[MOCK] The rep matched one or more enabled tone criteria or voice signals."
       : "[MOCK] No enabled tone criteria or elevated voice signals were detected.",
     flags,
+    findings: flags.map((f) => ({
+      ruleId: f.source === "voice" ? `voice:${(f.reason.match(/sounds (\w+)/i)?.[1] ?? "negative").toLowerCase()}` : "builtin:negative-behavior",
+      triggered: true,
+      quote: f.quote,
+      startMs: f.timestamp * 1000,
+      source: f.source,
+      confidence: 0.95,
+      reason: f.reason,
+    })),
   };
 }

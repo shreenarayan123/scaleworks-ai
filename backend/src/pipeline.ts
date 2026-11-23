@@ -7,14 +7,44 @@
 import { prisma } from "./db.js";
 import type { Prisma } from "./generated/prisma/client.js";
 import { negativeEvidence, overallScores, scoreSegments, type ScoredSegment } from "./emotion.js";
-import { extractActionItems, judgeTone, type Line } from "./llm.js";
+import { assessSpeakers, extractActionItems, judgeTone, type Line } from "./llm.js";
 import { parseAnalysisSettings } from "./analysis-settings.js";
+import { createEmotionChunks } from "./audio.js";
+import { rm } from "node:fs/promises";
+import { performance } from "node:perf_hooks";
 import { transcribe } from "./scribe.js";
 import { buildRepSegments, mergeWords, sentences, textOf, type TimedWord } from "./segments.js";
+import { needsSpeakerConfirmation, speakerEvidence } from "./speaker-role.js";
 
-export type Stage = "uploaded" | "transcribing" | "scoring_tone" | "analyzing" | "done" | "failed";
-type Checkpoint = Exclude<Stage, "failed">;
+export type Stage = "uploaded" | "transcribing" | "scoring_tone" | "analyzing" | "done" | "failed" | "needs_speaker_confirmation";
+type Checkpoint = Exclude<Stage, "failed" | "needs_speaker_confirmation">;
 const json = (value: unknown) => value as Prisma.InputJsonValue;
+
+// A one-hour transcript has ~10k words. Writing them all inside one Prisma
+// transaction exceeds its default timeout on a pooled Postgres connection.
+// The checkpoint (committed only after every batch lands) makes a partial
+// write safe: a retry deletes the job's rows before writing them again.
+const WRITE_BATCH_SIZE = 1_000;
+
+async function replaceWords(jobId: string, words: TimedWord[]) {
+  await prisma.word.deleteMany({ where: { jobId } });
+  for (let start = 0; start < words.length; start += WRITE_BATCH_SIZE) {
+    await prisma.word.createMany({
+      data: words.slice(start, start + WRITE_BATCH_SIZE).map((w, index) => ({ jobId, index: start + index, ...w })),
+    });
+  }
+}
+
+async function replaceSegments(jobId: string, segments: ScoredSegment[]) {
+  await prisma.segment.deleteMany({ where: { jobId } });
+  for (let start = 0; start < segments.length; start += WRITE_BATCH_SIZE) {
+    await prisma.segment.createMany({
+      data: segments.slice(start, start + WRITE_BATCH_SIZE).map((s) => ({
+        jobId, start: s.start, end: s.end, text: s.text, emotions: json(s.emotions),
+      })),
+    });
+  }
+}
 
 async function setStage(jobId: string, stage: Stage) {
   await prisma.job.update({ where: { id: jobId }, data: { stage, error: null } });
@@ -46,20 +76,23 @@ export function speakerTurns(words: TimedWord[]) {
 async function transcribeStage(jobId: string) {
   const job = await prisma.job.findUniqueOrThrow({ where: { id: jobId } });
   await setStage(jobId, "transcribing");
-  const transcript = await transcribe(job.filePath, job.fileName, job.durationSec);
+  const transcript = await transcribe(job.id, job.filePath, job.fileName, job.durationSec);
   if (transcript.words.length === 0) throw new Error("No speech was found in the recording.");
 
   const perSpeaker: Record<string, string> = {};
   for (const w of transcript.words) perSpeaker[w.speaker] = perSpeaker[w.speaker] ? `${perSpeaker[w.speaker]} ${w.text}` : w.text;
-  await prisma.$transaction([
-    prisma.word.deleteMany({ where: { jobId } }),
-    prisma.word.createMany({ data: transcript.words.map((w, index) => ({ jobId, index, ...w })) }),
-    prisma.job.update({
-      where: { id: jobId },
-      data: { transcript: transcript.text, speakerTranscripts: json(perSpeaker), repSpeaker: transcript.words[0]!.speaker },
-    }),
-  ]);
+  const { excerpt, stats } = speakerEvidence(transcript.words);
+  const candidates = (await assessSpeakers(excerpt, stats)).sort((a, b) => b.repLikelihood - a.repLikelihood);
+  const best = candidates[0];
+  if (!best) throw new Error("Could not identify speakers in the transcript.");
+  const needsConfirmation = needsSpeakerConfirmation(candidates);
+  await replaceWords(jobId, transcript.words);
+  await prisma.job.update({
+    where: { id: jobId },
+    data: { transcript: transcript.text, speakerTranscripts: json(perSpeaker), repSpeaker: best.speaker, repCandidates: json(candidates) },
+  });
   await commitCheckpoint(jobId, "transcribing");
+  if (needsConfirmation) await prisma.job.update({ where: { id: jobId }, data: { stage: "needs_speaker_confirmation" } });
 }
 
 async function scoreToneStage(jobId: string): Promise<ScoredSegment[]> {
@@ -67,13 +100,50 @@ async function scoreToneStage(jobId: string): Promise<ScoredSegment[]> {
   const words = await prisma.word.findMany({ where: { jobId }, orderBy: { index: "asc" } });
   if (!job.repSpeaker) throw new Error("Cannot score tone without a representative speaker.");
   await setStage(jobId, "scoring_tone");
-  const scored = await scoreSegments(job.filePath, buildRepSegments(words, job.repSpeaker, job.durationSec));
-  await prisma.$transaction([
-    prisma.segment.deleteMany({ where: { jobId } }),
-    prisma.segment.createMany({
-      data: scored.map((s) => ({ jobId, start: s.start, end: s.end, text: s.text, emotions: json(s.emotions) })),
-    }),
-  ]);
+  const repSegments = buildRepSegments(words, job.repSpeaker, job.durationSec);
+  const chunked = job.durationSec > 330 ? await createEmotionChunks(job.filePath) : null;
+  const chunks = chunked?.chunks ?? [{ filePath: job.filePath, startSec: 0, endSec: job.durationSec }];
+  await prisma.job.update({ where: { id: jobId }, data: { chunkTotal: chunks.length, chunkDone: 0 } });
+  const scoredByChunk: ScoredSegment[][] = Array(chunks.length);
+  let next = 0;
+  try {
+    // emotion2vec is one CPU model guarded by a lock in the service; parallel
+    // HTTP requests only queue behind that lock and can each hit their timeout.
+    await Promise.all(Array.from({ length: Math.min(1, chunks.length) }, async () => {
+      while (true) {
+        const index = next++;
+        if (index >= chunks.length) return;
+        const chunk = chunks[index]!;
+        const utterances = repSegments.filter((u) => u.end > chunk.startSec && u.start < chunk.endSec).map((u) => {
+          const start = Math.max(u.start, chunk.startSec);
+          const end = Math.min(u.end, chunk.endSec);
+          const selectedWords = u.words.filter((word) => (word.start + word.end) / 2 >= chunk.startSec && (word.start + word.end) / 2 < chunk.endSec);
+          return {
+            ...u,
+            start: start - chunk.startSec,
+            end: end - chunk.startSec,
+            words: selectedWords.map((word) => ({ ...word, start: word.start - chunk.startSec, end: word.end - chunk.startSec })),
+          };
+        }).filter((u) => u.end > u.start && u.words.length > 0);
+        const chunkStarted = performance.now();
+        console.info(`[emotion] chunk started ${JSON.stringify({ jobId, chunk: index + 1, total: chunks.length, utterances: utterances.length })}`);
+        let result: ScoredSegment[];
+        try {
+          result = await scoreSegments(chunk.filePath, utterances);
+        } catch (error) {
+          console.error(`[emotion] chunk failed ${JSON.stringify({ jobId, chunk: index + 1, total: chunks.length, utterances: utterances.length, elapsedMs: Math.round(performance.now() - chunkStarted), error: error instanceof Error ? error.message : String(error) })}`);
+          throw error;
+        }
+        scoredByChunk[index] = result.map((segment) => ({ ...segment, start: segment.start + chunk.startSec, end: segment.end + chunk.startSec }));
+        await prisma.job.update({ where: { id: jobId }, data: { chunkDone: { increment: 1 } } });
+        console.info(`[emotion] chunk completed ${JSON.stringify({ jobId, chunk: index + 1, total: chunks.length, elapsedMs: Math.round(performance.now() - chunkStarted), utterances: utterances.length })}`);
+      }
+    }));
+  } finally {
+    if (chunked) await rm(chunked.directory, { recursive: true, force: true });
+  }
+  const scored = scoredByChunk.flat();
+  await replaceSegments(jobId, scored);
   await commitCheckpoint(jobId, "scoring_tone");
   return scored;
 }
@@ -122,6 +192,7 @@ async function runFromCheckpoint(jobId: string, forceAnalysis = false) {
     await transcribeStage(jobId);
     job = await prisma.job.findUniqueOrThrow({ where: { id: jobId } });
   }
+  if (job.stage === "needs_speaker_confirmation" && !forceAnalysis) return;
   const scored =
     job.checkpointStage === "scoring_tone" && !forceAnalysis ? await loadScoredSegments(jobId) : await scoreToneStage(jobId);
   await analyzeStage(jobId, scored);

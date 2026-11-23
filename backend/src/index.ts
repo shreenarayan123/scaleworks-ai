@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
@@ -10,10 +10,16 @@ import { config } from "./config.js";
 import { prisma } from "./db.js";
 import { Prisma } from "./generated/prisma/client.js";
 import { runAnalysis, runPipeline, speakerTurns } from "./pipeline.js";
+import { lintToneRules } from "./llm.js";
+import { publicRepCandidates } from "./speaker-role.js";
 import { audioDurationSec, isSupportedAudioFile } from "./audio.js";
 import { AnalysisSettingsSchema, parseAnalysisSettings } from "./analysis-settings.js";
 
 mkdirSync(config.uploadDir, { recursive: true });
+const analysisProvenance = (settings: ReturnType<typeof parseAnalysisSettings>) => ({
+  rulesHash: createHash("sha256").update(JSON.stringify({ toneRules: settings.toneRules, negativeBehaviors: settings.negativeBehaviors })).digest("hex"),
+  promptVersion: "tone-findings-v3",
+});
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -30,6 +36,17 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, mockExternal: config.mockExternal });
+});
+
+app.post("/rules/lint", async (req, res) => {
+  // Accept incomplete drafts here so local rule checks can return inline feedback
+  // instead of rejecting the request before the user can see what's wrong.
+  const body = z.object({ toneRules: z.array(z.string().max(5_000)), negativeBehaviors: AnalysisSettingsSchema.shape.negativeBehaviors.optional() }).safeParse(req.body);
+  if (!body.success) {
+    res.status(400).json({ error: "Tone rules are invalid." });
+    return;
+  }
+  res.json(await lintToneRules(body.data.toneRules, body.data.negativeBehaviors ?? []));
 });
 
 app.get("/metrics", (_req, res) => {
@@ -85,7 +102,7 @@ app.post("/jobs", upload.single("file"), async (req, res) => {
   }
 
   const job = await prisma.job.create({
-    data: { fileName: req.file.originalname, filePath: req.file.path, durationSec, analysisSettings: analysisSettings as Prisma.InputJsonValue },
+    data: { fileName: req.file.originalname, filePath: req.file.path, durationSec, analysisSettings: analysisSettings as Prisma.InputJsonValue, ...analysisProvenance(analysisSettings) },
   });
   void runPipeline(job.id); // not awaited: runs in the background
   res.status(202).json({ jobId: job.id });
@@ -124,6 +141,8 @@ app.get("/jobs", async (req, res) => {
       fileName: j.fileName,
       stage: j.stage,
       error: j.error,
+      chunkTotal: j.chunkTotal,
+      chunkDone: j.chunkDone,
       durationSec: j.durationSec,
       createdAt: j.createdAt,
       verdict: (j.result?.verdict as { verdict?: string } | null)?.verdict ?? null,
@@ -152,7 +171,7 @@ app.get("/jobs/:id", async (req, res) => {
   }
   const { filePath: _hidden, ...rest } = job;
   const speakers = [...new Set(job.words.map((w) => w.speaker))]; // in order of first appearance
-  res.json({ ...rest, speakers, turns: speakerTurns(job.words) });
+  res.json({ ...rest, repCandidates: publicRepCandidates(job.repCandidates), speakers, turns: speakerTurns(job.words) });
 });
 
 // Stream the original recording for the frontend's audio player.
@@ -177,7 +196,7 @@ app.patch("/jobs/:id/rep-speaker", async (req, res) => {
     res.status(404).json({ error: "Job not found." });
     return;
   }
-  if (job.stage !== "done" && job.stage !== "failed") {
+  if (job.stage !== "done" && job.stage !== "failed" && job.stage !== "needs_speaker_confirmation") {
     res.status(409).json({ error: "This job is still processing. Try again when it finishes." });
     return;
   }
@@ -187,12 +206,13 @@ app.patch("/jobs/:id/rep-speaker", async (req, res) => {
     return;
   }
 
-  const analysisSettings = body.data.analysisSettings ?? parseAnalysisSettings(job.analysisSettings);
+  const analysisSettings = parseAnalysisSettings(body.data.analysisSettings ?? job.analysisSettings);
   await prisma.job.update({
     where: { id: job.id },
     data: {
       repSpeaker: body.data.speaker,
       analysisSettings: analysisSettings as Prisma.InputJsonValue,
+      ...analysisProvenance(analysisSettings),
       stage: "scoring_tone",
       error: null,
     },
@@ -223,6 +243,29 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ error: "Something went wrong on the server." });
 });
 
+async function recoverInterruptedJobs() {
+  // In local development, tsx watch can restart the process while a background
+  // pipeline is running. Resume only jobs whose last durable checkpoint survived.
+  if (process.env.NODE_ENV === "production") return;
+  const jobs = await prisma.job.findMany({
+    where: { stage: { in: ["uploaded", "transcribing", "scoring_tone", "analyzing"] } },
+    select: { id: true, stage: true, checkpointStage: true, updatedAt: true },
+  });
+  for (const job of jobs) {
+    if (!["uploaded", "transcribing", "scoring_tone", "analyzing"].includes(job.checkpointStage)) continue;
+    const claimed = await prisma.job.updateMany({
+      where: { id: job.id, stage: job.stage, updatedAt: job.updatedAt },
+      data: { stage: job.checkpointStage, error: null },
+    });
+    if (claimed.count === 0) continue;
+    console.warn(`[job ${job.id}] recovering interrupted pipeline from checkpoint ${job.checkpointStage}`);
+    void runPipeline(job.id);
+  }
+}
+
 app.listen(config.port, () => {
   console.log(`Backend on http://localhost:${config.port}${config.mockExternal ? " (MOCK_EXTERNAL=true)" : ""}`);
+  void recoverInterruptedJobs().catch((error: unknown) => {
+    console.error("Could not recover interrupted jobs:", error instanceof Error ? error.message : error);
+  });
 });

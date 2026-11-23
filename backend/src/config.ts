@@ -1,6 +1,14 @@
 import "dotenv/config";
 
 const mockExternal = process.env.MOCK_EXTERNAL === "true";
+const scribeTimeoutMs = Number(process.env.SCRIBE_TIMEOUT_MS ?? 20 * 60 * 1000);
+const emotionTimeoutMs = Number(process.env.EMOTION_TIMEOUT_MS ?? 20 * 60 * 1000);
+if (!Number.isFinite(scribeTimeoutMs) || scribeTimeoutMs < 1_000) {
+  throw new Error("SCRIBE_TIMEOUT_MS must be a number of at least 1000 milliseconds.");
+}
+if (!Number.isFinite(emotionTimeoutMs) || emotionTimeoutMs < 1_000) {
+  throw new Error("EMOTION_TIMEOUT_MS must be a number of at least 1000 milliseconds.");
+}
 
 // Fail at startup with the names (never the values) of any missing variables.
 const needed = ["DATABASE_URL"];
@@ -18,6 +26,8 @@ export const config = {
   maxFileSizeBytes: Number(process.env.MAX_FILE_SIZE_BYTES ?? 200 * 1024 * 1024),
   maxDurationSec: Number(process.env.MAX_DURATION_SEC ?? 60 * 60),
   externalTimeoutMs: Number(process.env.EXTERNAL_TIMEOUT_MS ?? 120_000),
+  scribeTimeoutMs,
+  emotionTimeoutMs,
   injectScribeTimeout: process.env.INJECT_SCRIBE_TIMEOUT === "true",
   injectGlmInvalidJson: process.env.INJECT_GLM_INVALID_JSON === "true",
   emotionServiceUrl: process.env.EMOTION_SERVICE_URL ?? "http://127.0.0.1:8001",

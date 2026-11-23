@@ -1,0 +1,2 @@
+ALTER TABLE "Job" ADD COLUMN "rulesHash" TEXT;
+ALTER TABLE "Job" ADD COLUMN "promptVersion" TEXT;

@@ -1,5 +1,6 @@
 import { openAsBlob } from "node:fs";
 import { basename } from "node:path";
+import { Agent } from "undici";
 import { z } from "zod";
 import { config } from "./config.js";
 import { textOf, type Utterance } from "./segments.js";
@@ -26,6 +27,11 @@ const ServiceResponse = z.object({
   segments: z.array(z.object({ id: z.string(), start: z.number(), end: z.number(), scores: z.record(z.string(), z.number()) })),
 });
 
+const emotionAgent = new Agent({
+  headersTimeout: config.emotionTimeoutMs + 30_000,
+  bodyTimeout: config.emotionTimeoutMs + 30_000,
+});
+
 /** Send the original audio plus the segment list; get emotion scores per segment back. */
 export async function scoreSegments(filePath: string, segments: Utterance[]): Promise<ScoredSegment[]> {
   if (segments.length === 0) return [];
@@ -34,12 +40,22 @@ export async function scoreSegments(filePath: string, segments: Utterance[]): Pr
   form.append("audio", await openAsBlob(filePath), basename(filePath));
   form.append("segments", JSON.stringify(segments.map((s, i) => ({ id: String(i), start: s.start, end: s.end }))));
 
-  const res = await fetch(`${config.emotionServiceUrl}/score`, {
-    method: "POST",
-    headers: config.emotionServiceToken ? { Authorization: `Bearer ${config.emotionServiceToken}` } : undefined,
-    body: form,
-    signal: AbortSignal.timeout(config.externalTimeoutMs),
-  });
+  const controller = AbortSignal.timeout(config.emotionTimeoutMs);
+  let res: Response;
+  try {
+    res = await fetch(`${config.emotionServiceUrl}/score`, {
+      method: "POST",
+      headers: config.emotionServiceToken ? { Authorization: `Bearer ${config.emotionServiceToken}` } : undefined,
+      body: form,
+      signal: controller,
+      dispatcher: emotionAgent,
+    } as RequestInit & { dispatcher: Agent });
+  } catch (error) {
+    if (controller.aborted) {
+      throw new Error(`Emotion scoring timed out after ${Math.round(config.emotionTimeoutMs / 60_000)} minutes.`, { cause: error });
+    }
+    throw error;
+  }
   if (!res.ok) throw new Error(`Emotion service returned ${res.status}: ${(await res.text()).slice(0, 300)}`);
 
   const data = ServiceResponse.parse(await res.json());
